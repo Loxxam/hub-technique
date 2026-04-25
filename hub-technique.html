@@ -1,0 +1,2621 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hub technique — Raccourcis & Modes opératoires</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:          #0d0d0f;
+    --bg-raised:   #17171a;
+    --bg-card:     #1c1c20;
+    --bg-code:     #0a0a0c;
+    --border:      rgba(255, 255, 255, 0.06);
+    --border-strong: rgba(255, 255, 255, 0.12);
+    --text:        #ededea;
+    --text-muted:  #8a8a92;
+    --text-dim:    #5c5c64;
+    --accent:      #d4a574;
+    --accent-soft: #d4a57422;
+    --accent-hover: #e8b683;
+    --accent-blue: #7aa7d9;
+    --accent-green: #7dc89a;
+    --accent-red:  #d97a7a;
+    --key-bg-top:  #2a2a2f;
+    --key-bg-bot:  #1d1d22;
+    --key-border:  #353539;
+    --key-shadow:  rgba(0, 0, 0, 0.4);
+    --radius:      10px;
+    --radius-sm:   6px;
+
+    --syntax-keyword: #c792ea;
+    --syntax-string:  #c3e88d;
+    --syntax-comment: #676e95;
+    --syntax-func:    #82aaff;
+    --syntax-flag:    #ffcb6b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212, 165, 116, 0.08), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 100%, rgba(122, 167, 217, 0.04), transparent);
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    z-index: 1;
+  }
+
+  /* ============ LAYOUT ============ */
+  .app {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ============ SIDEBAR ============ */
+  aside {
+    background: var(--bg-raised);
+    border-right: 1px solid var(--border);
+    padding: 24px 14px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .brand {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    line-height: 1.15;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+    padding: 0 6px;
+  }
+  .brand em { font-style: italic; color: var(--accent); }
+
+  .brand-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 18px;
+    padding: 0 6px;
+  }
+
+  /* Global search in sidebar */
+  .search-wrapper {
+    position: relative;
+    margin-bottom: 22px;
+    padding: 0 6px;
+  }
+
+  .search-wrapper svg {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    pointer-events: none;
+  }
+
+  #global-search {
+    width: 100%;
+    padding: 9px 14px 9px 38px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+  #global-search:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  #global-search::placeholder { color: var(--text-dim); }
+
+  .search-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    padding: 0 6px;
+  }
+
+  .nav-group { margin-bottom: 18px; }
+
+  .nav-group-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    padding: 0 10px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 1px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.03); color: var(--text); }
+
+  .nav-item.active {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .nav-icon {
+    font-size: 14px;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .nav-sub {
+    margin-left: 28px;
+    padding-left: 12px;
+    border-left: 1px solid var(--border);
+    margin-top: 4px;
+    margin-bottom: 6px;
+    display: none;
+  }
+  .nav-item.active ~ .nav-sub { display: block; }
+
+  .nav-sub a {
+    display: block;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: all 0.15s;
+  }
+
+  .nav-sub a:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+
+  /* ============ MAIN ============ */
+  main {
+    padding: 36px 44px 80px;
+    max-width: 1200px;
+  }
+
+  .page { display: none; animation: fadeIn 0.25s ease-out; }
+  .page.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============ HEADER commun ============ */
+  .page-header {
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .page-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(30px, 4.5vw, 48px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .page-title em { font-style: italic; color: var(--accent); }
+
+  .page-intro {
+    color: var(--text-muted);
+    font-size: 14px;
+    max-width: 700px;
+  }
+
+  /* ============ HEADER SPÉCIFIQUE RACCOURCIS (légende 2 col à droite) ============ */
+  .shortcuts-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: start;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .shortcuts-header h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(28px, 3.8vw, 42px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+    white-space: nowrap;
+  }
+  .shortcuts-header h1 em { font-style: italic; color: var(--accent); }
+
+  .shortcuts-header .page-intro { margin-bottom: 0; font-size: 13px; }
+
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    column-gap: 22px;
+    row-gap: 7px;
+    padding: 14px 18px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .legend-item kbd {
+    min-width: 24px;
+    font-size: 11px;
+    padding: 3px 7px;
+  }
+
+  /* ============ SECTIONS (communes) ============ */
+  .section {
+    margin-bottom: 28px;
+    scroll-margin-top: 20px;
+  }
+
+  .section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border-strong), transparent);
+  }
+
+  /* MOP : bigger section titles */
+  .mop-section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+    color: var(--text);
+    text-transform: none;
+  }
+
+  .mop-section-title::after { display: none; }
+
+  .section-subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+
+  /* ============ CARTE RACCOURCI (grille 4 col) ============ */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 9px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.15s ease;
+    min-width: 0;
+  }
+
+  .card:hover {
+    background: var(--bg-card);
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+  }
+
+  .card-desc {
+    font-size: 12.5px;
+    color: var(--text);
+    line-height: 1.3;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .card-desc .tip {
+    display: block;
+    font-size: 10.5px;
+    color: var(--text-dim);
+    margin-top: 1px;
+    font-style: italic;
+  }
+
+  .keys {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  kbd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 7px;
+    min-width: 22px;
+    background: linear-gradient(to bottom, var(--key-bg-top), var(--key-bg-bot));
+    border: 1px solid var(--key-border);
+    border-bottom-width: 2px;
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    box-shadow:
+      0 1px 0 var(--key-shadow),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  kbd.wide { padding-left: 10px; padding-right: 10px; }
+
+  /* ============ SCENARIO (MOP) ============ */
+  .scenario {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+  }
+
+  .scenario:hover { border-color: var(--border-strong); }
+
+  .scenario-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .scenario-title::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    margin-top: 8px;
+  }
+
+  .scenario-desc {
+    color: var(--text-muted);
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin-bottom: 12px;
+    padding-left: 14px;
+  }
+
+  .scenario-desc strong { color: var(--text); font-weight: 500; }
+  .scenario-desc code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 1px 6px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  /* ============ CODE BLOCK ============ */
+  .code-block {
+    position: relative;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin: 10px 0 6px;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.015);
+  }
+
+  .code-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .copy-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .copy-btn:hover {
+    background: var(--bg-card);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+
+  .copy-btn.copied {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  pre {
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  pre code { font-family: inherit; }
+
+  .sh-comment { color: var(--syntax-comment); font-style: italic; }
+  .sh-str     { color: var(--syntax-string); }
+  .sh-func    { color: var(--syntax-func); }
+
+  /* ============ CALLOUT ============ */
+  .callout {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(122, 167, 217, 0.06);
+    border: 1px solid rgba(122, 167, 217, 0.2);
+    border-left: 3px solid var(--accent-blue);
+    border-radius: var(--radius-sm);
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .callout.warn {
+    background: rgba(217, 122, 122, 0.06);
+    border-color: rgba(217, 122, 122, 0.2);
+    border-left-color: var(--accent-red);
+  }
+
+  .callout.tip {
+    background: rgba(125, 200, 154, 0.06);
+    border-color: rgba(125, 200, 154, 0.2);
+    border-left-color: var(--accent-green);
+  }
+
+  .callout-icon {
+    flex-shrink: 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .callout strong { color: var(--text); font-weight: 600; }
+
+  /* ============ PROJECT CARDS ============ */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 14px;
+    margin-top: 6px;
+  }
+
+  .project {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 12px;
+  }
+
+  .project-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .project-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .badge-l1 { background: rgba(125, 200, 154, 0.12); color: var(--accent-green); }
+  .badge-l2 { background: rgba(255, 203, 107, 0.12); color: var(--syntax-flag); }
+  .badge-l3 { background: rgba(217, 122, 122, 0.12); color: var(--accent-red); }
+  .badge-l4 { background: rgba(199, 146, 234, 0.12); color: var(--syntax-keyword); }
+
+  .project-desc {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.65;
+    margin-bottom: 14px;
+    flex: 1;
+  }
+
+  .project-prompt-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  .level-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin: 28px 0 8px;
+  }
+
+  .level-subtitle {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  /* ============ TABLE ============ */
+  .table-wrap {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  th, td {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    background: rgba(255,255,255,0.02);
+    font-weight: 500;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  td:first-child code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--accent);
+    background: var(--bg-code);
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.015); }
+
+  /* ============ SEARCH RESULTS ============ */
+  .no-results {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+    display: none;
+  }
+  .no-results.show { display: block; }
+
+  .search-mode-banner {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 12.5px;
+    color: var(--accent);
+    display: none;
+  }
+  .search-mode-banner.show { display: block; }
+
+  /* ============ MOBILE ============ */
+  .menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 100;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  @media (max-width: 1200px) {
+    .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    aside {
+      position: fixed;
+      left: -280px;
+      top: 0;
+      z-index: 99;
+      width: 260px;
+      transition: left 0.3s ease;
+      box-shadow: 8px 0 24px rgba(0,0,0,0.4);
+    }
+    aside.open { left: 0; }
+    main { padding: 64px 24px 60px; }
+    .menu-toggle { display: block; }
+    .project-grid { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .shortcuts-header { grid-template-columns: 1fr; gap: 18px; }
+    .shortcuts-header h1 { white-space: normal; }
+  }
+
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; }
+    .legend { grid-template-columns: 1fr 1fr; }
+  }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" id="menuToggle">☰ Menu</button>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside id="sidebar">
+    <div class="brand">Hub <em>technique</em></div>
+    <div class="brand-sub">Mac · Dev · DSI</div>
+
+    <div class="search-wrapper">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="search" id="global-search" placeholder="Rechercher partout…" autocomplete="off">
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Raccourcis clavier</div>
+      <button class="nav-item active" data-page="system"><span class="nav-icon">🍎</span><span>Système</span></button>
+      <button class="nav-item" data-page="chars"><span class="nav-icon">{}</span><span>Caractères</span></button>
+      <button class="nav-item" data-page="screenshot"><span class="nav-icon">📷</span><span>Captures</span></button>
+      <button class="nav-item" data-page="finder"><span class="nav-icon">📁</span><span>Finder</span></button>
+      <button class="nav-item" data-page="text"><span class="nav-icon">✎</span><span>Édition texte</span></button>
+      <button class="nav-item" data-page="simulator"><span class="nav-icon">📱</span><span>iOS Simulator</span></button>
+      <button class="nav-item" data-page="jetbrains"><span class="nav-icon">🟧</span><span>JetBrains / Rider</span></button>
+      <button class="nav-item" data-page="vscode"><span class="nav-icon">🟦</span><span>VS Code</span></button>
+      <button class="nav-item" data-page="browser"><span class="nav-icon">🌐</span><span>Navigateurs</span></button>
+      <button class="nav-item" data-page="terminal"><span class="nav-icon">▶_</span><span>Terminal</span></button>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Modes opératoires</div>
+      <button class="nav-item" data-page="git"><span class="nav-icon">🌿</span><span>Git</span></button>
+      <div class="nav-sub">
+        <a href="#git-concepts">Concepts de base</a>
+        <a href="#git-config">Configuration initiale</a>
+        <a href="#git-quotidien">Travail au quotidien</a>
+        <a href="#git-branches">Branches & fusion</a>
+        <a href="#git-erreurs">Rattraper une erreur</a>
+        <a href="#git-collab">Collaboration (push/pull)</a>
+        <a href="#git-cheatsheet">Cheat sheet</a>
+      </div>
+      <button class="nav-item" data-page="claude-code"><span class="nav-icon">🤖</span><span>Claude Code</span></button>
+      <div class="nav-sub">
+        <a href="#cc-installation">Installation</a>
+        <a href="#cc-premier-pas">Premiers pas</a>
+        <a href="#cc-scenarios">Scénarios courants</a>
+        <a href="#cc-slash">Commandes slash</a>
+        <a href="#cc-bonnes-pratiques">Bonnes pratiques</a>
+        <a href="#cc-projets">Idées de projets</a>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">À venir</div>
+      <div class="nav-item" style="opacity:0.4;cursor:default"><span class="nav-icon">🐳</span><span>Docker</span></div>
+      <div class="nav-item" style="opacity:0.4;cursor:default"><span class="nav-icon">🍺</span><span>Homebrew</span></div>
+      <div class="nav-item" style="opacity:0.4;cursor:default"><span class="nav-icon">🔑</span><span>SSH</span></div>
+    </div>
+  </aside>
+
+  <main>
+
+    <div class="search-mode-banner" id="searchBanner">
+      🔍 Recherche globale active — résultats filtrés dans toutes les catégories. Appuie sur <kbd style="padding:1px 6px;font-size:10px">Échap</kbd> pour effacer.
+    </div>
+
+    <div class="no-results" id="noResults">Aucun résultat pour ta recherche.</div>
+
+    <!-- ================ SHORTCUTS HEADER (visible uniquement sur pages de raccourcis) ================ -->
+    <div class="shortcuts-header" id="shortcutsHeader">
+      <div>
+        <h1>Raccourcis <em>clavier</em> macOS</h1>
+        <p class="page-intro">Aide-mémoire des combinaisons utiles au quotidien, organisées par contexte et par logiciel. Clavier Mac AZERTY français.</p>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><kbd>⌘</kbd> Command</div>
+        <div class="legend-item"><kbd>⌃</kbd> Control</div>
+        <div class="legend-item"><kbd>⌥</kbd> Option / alt</div>
+        <div class="legend-item"><kbd>⇥</kbd> Tab</div>
+        <div class="legend-item"><kbd>⇧</kbd> Shift / maj</div>
+        <div class="legend-item"><kbd>↩</kbd> Entrée</div>
+        <div class="legend-item"><kbd>⌫</kbd> Suppr</div>
+        <div class="legend-item"><kbd>␣</kbd> Espace</div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- RACCOURCIS : SYSTÈME                                                -->
+    <!-- =================================================================== -->
+    <div class="page active" data-page="system" data-type="shortcuts">
+      <div class="section"><div class="section-title">Lancement & recherche</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Ouvrir Spotlight</span><span class="keys"><kbd>⌘</kbd><kbd class="wide">␣</kbd></span></div>
+          <div class="card"><span class="card-desc">Basculer d'app en app</span><span class="keys"><kbd>⌘</kbd><kbd>⇥</kbd></span></div>
+          <div class="card"><span class="card-desc">Fenêtres de la même app</span><span class="keys"><kbd>⌘</kbd><kbd>`</kbd></span></div>
+          <div class="card"><span class="card-desc">Forcer à quitter une app</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>⎋</kbd></span></div>
+          <div class="card"><span class="card-desc">Verrouiller l'écran</span><span class="keys"><kbd>⌃</kbd><kbd>⌘</kbd><kbd>Q</kbd></span></div>
+          <div class="card"><span class="card-desc">Mettre en veille</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>⏏</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Fenêtres & applications</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Masquer l'app active</span><span class="keys"><kbd>⌘</kbd><kbd>H</kbd></span></div>
+          <div class="card"><span class="card-desc">Masquer les autres apps</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>H</kbd></span></div>
+          <div class="card"><span class="card-desc">Quitter l'application</span><span class="keys"><kbd>⌘</kbd><kbd>Q</kbd></span></div>
+          <div class="card"><span class="card-desc">Fermer la fenêtre</span><span class="keys"><kbd>⌘</kbd><kbd>W</kbd></span></div>
+          <div class="card"><span class="card-desc">Fermer tous les onglets</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>W</kbd></span></div>
+          <div class="card"><span class="card-desc">Réduire dans le Dock</span><span class="keys"><kbd>⌘</kbd><kbd>M</kbd></span></div>
+          <div class="card"><span class="card-desc">Réduire toutes les fenêtres</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>M</kbd></span></div>
+          <div class="card"><span class="card-desc">Nouvelle fenêtre</span><span class="keys"><kbd>⌘</kbd><kbd>N</kbd></span></div>
+          <div class="card"><span class="card-desc">Nouvel onglet</span><span class="keys"><kbd>⌘</kbd><kbd>T</kbd></span></div>
+          <div class="card"><span class="card-desc">Plein écran (bascule)</span><span class="keys"><kbd>⌃</kbd><kbd>⌘</kbd><kbd>F</kbd></span></div>
+          <div class="card"><span class="card-desc">Préférences de l'app</span><span class="keys"><kbd>⌘</kbd><kbd>,</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Mission Control & bureaux</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Mission Control</span><span class="keys"><kbd>⌃</kbd><kbd>↑</kbd></span></div>
+          <div class="card"><span class="card-desc">App Exposé</span><span class="keys"><kbd>⌃</kbd><kbd>↓</kbd></span></div>
+          <div class="card"><span class="card-desc">Bureau précédent</span><span class="keys"><kbd>⌃</kbd><kbd>←</kbd></span></div>
+          <div class="card"><span class="card-desc">Bureau suivant</span><span class="keys"><kbd>⌃</kbd><kbd>→</kbd></span></div>
+          <div class="card"><span class="card-desc">Afficher le bureau</span><span class="keys"><kbd>fn</kbd><kbd>F11</kbd></span></div>
+          <div class="card"><span class="card-desc">Launchpad</span><span class="keys"><kbd>fn</kbd><kbd>F4</kbd></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- RACCOURCIS : CARACTÈRES                                             -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="chars" data-type="shortcuts">
+      <div class="section"><div class="section-title">Crochets & accolades (AZERTY Mac)</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Crochet ouvrant <strong>[</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>(</kbd></span></div>
+          <div class="card"><span class="card-desc">Crochet fermant <strong>]</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>)</kbd></span></div>
+          <div class="card"><span class="card-desc">Accolade ouvrante <strong>{</strong></span><span class="keys"><kbd>⌥</kbd><kbd>(</kbd></span></div>
+          <div class="card"><span class="card-desc">Accolade fermante <strong>}</strong></span><span class="keys"><kbd>⌥</kbd><kbd>)</kbd></span></div>
+          <div class="card"><span class="card-desc">Pipe <strong>|</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>L</kbd></span></div>
+          <div class="card"><span class="card-desc">Anti-slash <strong>\</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>/</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Programmation & web</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Arobase <strong>@</strong></span><span class="keys"><kbd>@</kbd></span></div>
+          <div class="card"><span class="card-desc">Dièse <strong>#</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>@</kbd></span></div>
+          <div class="card"><span class="card-desc">Tilde <strong>~</strong> <span class="tip">puis espace</span></span><span class="keys"><kbd>⌥</kbd><kbd>N</kbd></span></div>
+          <div class="card"><span class="card-desc">Backtick <strong>`</strong> <span class="tip">puis espace</span></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>@</kbd></span></div>
+          <div class="card"><span class="card-desc">Esperluette <strong>&</strong></span><span class="keys"><kbd>1</kbd></span></div>
+          <div class="card"><span class="card-desc">Euro <strong>€</strong></span><span class="keys"><kbd>⌥</kbd><kbd>$</kbd></span></div>
+          <div class="card"><span class="card-desc">Dollar <strong>$</strong></span><span class="keys"><kbd>$</kbd></span></div>
+          <div class="card"><span class="card-desc">Livre <strong>£</strong></span><span class="keys"><kbd>⇧</kbd><kbd>$</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Typographie & symboles</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Points suspension <strong>…</strong></span><span class="keys"><kbd>⌥</kbd><kbd>;</kbd></span></div>
+          <div class="card"><span class="card-desc">Puce <strong>•</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>:</kbd></span></div>
+          <div class="card"><span class="card-desc">Tiret cadratin <strong>—</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>-</kbd></span></div>
+          <div class="card"><span class="card-desc">Tiret demi-cadratin <strong>–</strong></span><span class="keys"><kbd>⌥</kbd><kbd>-</kbd></span></div>
+          <div class="card"><span class="card-desc">Guillemets fr. <strong>«</strong></span><span class="keys"><kbd>⌥</kbd><kbd>7</kbd></span></div>
+          <div class="card"><span class="card-desc">Guillemets fr. <strong>»</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>7</kbd></span></div>
+          <div class="card"><span class="card-desc">Copyright <strong>©</strong></span><span class="keys"><kbd>⌥</kbd><kbd>C</kbd></span></div>
+          <div class="card"><span class="card-desc">Registered <strong>®</strong></span><span class="keys"><kbd>⌥</kbd><kbd>R</kbd></span></div>
+          <div class="card"><span class="card-desc">Trademark <strong>™</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>2</kbd></span></div>
+          <div class="card"><span class="card-desc">Œ majuscule</span><span class="keys"><kbd>⌥</kbd><kbd>O</kbd></span></div>
+          <div class="card"><span class="card-desc">Æ majuscule</span><span class="keys"><kbd>⌥</kbd><kbd>A</kbd></span></div>
+          <div class="card"><span class="card-desc">Ç majuscule</span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>Ç</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Mathématiques & scientifique</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Différent de <strong>≠</strong></span><span class="keys"><kbd>⌥</kbd><kbd>=</kbd></span></div>
+          <div class="card"><span class="card-desc">Plus ou moins <strong>±</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>=</kbd></span></div>
+          <div class="card"><span class="card-desc">Inférieur ou égal <strong>≤</strong></span><span class="keys"><kbd>⌥</kbd><kbd>&lt;</kbd></span></div>
+          <div class="card"><span class="card-desc">Supérieur ou égal <strong>≥</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>&lt;</kbd></span></div>
+          <div class="card"><span class="card-desc">Infini <strong>∞</strong></span><span class="keys"><kbd>⌥</kbd><kbd>B</kbd></span></div>
+          <div class="card"><span class="card-desc">Racine carrée <strong>√</strong></span><span class="keys"><kbd>⌥</kbd><kbd>V</kbd></span></div>
+          <div class="card"><span class="card-desc">Pi <strong>π</strong></span><span class="keys"><kbd>⌥</kbd><kbd>P</kbd></span></div>
+          <div class="card"><span class="card-desc">Micro <strong>µ</strong></span><span class="keys"><kbd>⌥</kbd><kbd>M</kbd></span></div>
+          <div class="card"><span class="card-desc">Oméga <strong>Ω</strong></span><span class="keys"><kbd>⌥</kbd><kbd>Z</kbd></span></div>
+          <div class="card"><span class="card-desc">Degré <strong>°</strong></span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>K</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Visualiseur & émojis</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Visualiseur de clavier</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>␣</kbd></span></div>
+          <div class="card"><span class="card-desc">Sélecteur d'émojis & symboles</span><span class="keys"><kbd>⌃</kbd><kbd>⌘</kbd><kbd>␣</kbd></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- RACCOURCIS : CAPTURES                                               -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="screenshot" data-type="shortcuts">
+      <div class="section"><div class="section-title">Captures d'écran</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Écran entier</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>3</kbd></span></div>
+          <div class="card"><span class="card-desc">Zone sélectionnée</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>4</kbd></span></div>
+          <div class="card"><span class="card-desc">Fenêtre <span class="tip">⌘⇧4 puis espace</span></span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>4</kbd><kbd>␣</kbd></span></div>
+          <div class="card"><span class="card-desc">Barre d'outils avancée</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>5</kbd></span></div>
+          <div class="card"><span class="card-desc">Touch Bar</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>6</kbd></span></div>
+          <div class="card"><span class="card-desc">Enregistrement vidéo</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>5</kbd></span></div>
+          <div class="card"><span class="card-desc">Copier vers presse-papier <span class="tip">ajouter ⌃</span></span><span class="keys"><kbd>+</kbd><kbd>⌃</kbd></span></div>
+          <div class="card"><span class="card-desc">Annuler capture en cours</span><span class="keys"><kbd>⎋</kbd></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- RACCOURCIS : FINDER                                                 -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="finder" data-type="shortcuts">
+      <div class="section"><div class="section-title">Fichiers & dossiers</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Nouveau dossier</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>N</kbd></span></div>
+          <div class="card"><span class="card-desc">Dossier intelligent</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>N</kbd></span></div>
+          <div class="card"><span class="card-desc">Dupliquer l'élément</span><span class="keys"><kbd>⌘</kbd><kbd>D</kbd></span></div>
+          <div class="card"><span class="card-desc">Ouvrir l'élément</span><span class="keys"><kbd>⌘</kbd><kbd>O</kbd></span></div>
+          <div class="card"><span class="card-desc">Aperçu rapide</span><span class="keys"><kbd>␣</kbd></span></div>
+          <div class="card"><span class="card-desc">Obtenir les infos</span><span class="keys"><kbd>⌘</kbd><kbd>I</kbd></span></div>
+          <div class="card"><span class="card-desc">Renommer</span><span class="keys"><kbd>↩</kbd></span></div>
+          <div class="card"><span class="card-desc">Mettre à la corbeille</span><span class="keys"><kbd>⌘</kbd><kbd>⌫</kbd></span></div>
+          <div class="card"><span class="card-desc">Vider la corbeille</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>⌫</kbd></span></div>
+          <div class="card"><span class="card-desc">Supprimer définitivement</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>⌫</kbd></span></div>
+          <div class="card"><span class="card-desc">Copier</span><span class="keys"><kbd>⌘</kbd><kbd>C</kbd></span></div>
+          <div class="card"><span class="card-desc">Coller</span><span class="keys"><kbd>⌘</kbd><kbd>V</kbd></span></div>
+          <div class="card"><span class="card-desc"><strong>Déplacer</strong> (au lieu de copier)</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>V</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Navigation</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Aller à un dossier (chemin)</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>G</kbd></span></div>
+          <div class="card"><span class="card-desc">Dossier Départ</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>H</kbd></span></div>
+          <div class="card"><span class="card-desc">Applications</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>A</kbd></span></div>
+          <div class="card"><span class="card-desc">Bureau</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>D</kbd></span></div>
+          <div class="card"><span class="card-desc">iCloud Drive</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>I</kbd></span></div>
+          <div class="card"><span class="card-desc">Dossier parent</span><span class="keys"><kbd>⌘</kbd><kbd>↑</kbd></span></div>
+          <div class="card"><span class="card-desc">Ouvrir le dossier</span><span class="keys"><kbd>⌘</kbd><kbd>↓</kbd></span></div>
+          <div class="card"><span class="card-desc">Chemin d'accès complet</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>P</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Affichage</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Vue icônes</span><span class="keys"><kbd>⌘</kbd><kbd>1</kbd></span></div>
+          <div class="card"><span class="card-desc">Vue liste</span><span class="keys"><kbd>⌘</kbd><kbd>2</kbd></span></div>
+          <div class="card"><span class="card-desc">Vue colonnes</span><span class="keys"><kbd>⌘</kbd><kbd>3</kbd></span></div>
+          <div class="card"><span class="card-desc">Vue galerie</span><span class="keys"><kbd>⌘</kbd><kbd>4</kbd></span></div>
+          <div class="card"><span class="card-desc">Fichiers cachés</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>.</kbd></span></div>
+          <div class="card"><span class="card-desc">Barre latérale</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>S</kbd></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- RACCOURCIS : ÉDITION TEXTE                                          -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="text" data-type="shortcuts">
+      <div class="section"><div class="section-title">Sélection & navigation</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Tout sélectionner</span><span class="keys"><kbd>⌘</kbd><kbd>A</kbd></span></div>
+          <div class="card"><span class="card-desc">Sélect. mot par mot</span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>←/→</kbd></span></div>
+          <div class="card"><span class="card-desc">Sélect. début/fin ligne</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>←/→</kbd></span></div>
+          <div class="card"><span class="card-desc">Sélect. début/fin doc.</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>↑/↓</kbd></span></div>
+          <div class="card"><span class="card-desc">Mot préc. / suivant</span><span class="keys"><kbd>⌥</kbd><kbd>←/→</kbd></span></div>
+          <div class="card"><span class="card-desc">Début / fin de ligne</span><span class="keys"><kbd>⌘</kbd><kbd>←/→</kbd></span></div>
+          <div class="card"><span class="card-desc">Début / fin document</span><span class="keys"><kbd>⌘</kbd><kbd>↑/↓</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Suppression</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Supprimer le mot préc.</span><span class="keys"><kbd>⌥</kbd><kbd>⌫</kbd></span></div>
+          <div class="card"><span class="card-desc">Effacer début de ligne</span><span class="keys"><kbd>⌘</kbd><kbd>⌫</kbd></span></div>
+          <div class="card"><span class="card-desc">Suppr. caractère suivant <span class="tip">= Delete Windows</span></span><span class="keys"><kbd>fn</kbd><kbd>⌫</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Copier, coller, rechercher</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Copier</span><span class="keys"><kbd>⌘</kbd><kbd>C</kbd></span></div>
+          <div class="card"><span class="card-desc">Couper</span><span class="keys"><kbd>⌘</kbd><kbd>X</kbd></span></div>
+          <div class="card"><span class="card-desc">Coller</span><span class="keys"><kbd>⌘</kbd><kbd>V</kbd></span></div>
+          <div class="card"><span class="card-desc">Coller sans mise en forme</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>⇧</kbd><kbd>V</kbd></span></div>
+          <div class="card"><span class="card-desc">Annuler</span><span class="keys"><kbd>⌘</kbd><kbd>Z</kbd></span></div>
+          <div class="card"><span class="card-desc">Rétablir</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>Z</kbd></span></div>
+          <div class="card"><span class="card-desc">Rechercher</span><span class="keys"><kbd>⌘</kbd><kbd>F</kbd></span></div>
+          <div class="card"><span class="card-desc">Occurrence suivante</span><span class="keys"><kbd>⌘</kbd><kbd>G</kbd></span></div>
+          <div class="card"><span class="card-desc">Occurrence précédente</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>G</kbd></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- RACCOURCIS : iOS SIMULATOR                                          -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="simulator" data-type="shortcuts">
+      <div class="section"><div class="section-title">Application & fenêtre</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc"><strong>Réduire l'app</strong> (Home)</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>H</kbd></span></div>
+          <div class="card"><span class="card-desc">Double Home (Switcher)</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>H</kbd><kbd>×2</kbd></span></div>
+          <div class="card"><span class="card-desc"><strong>Fermer</strong> Simulator</span><span class="keys"><kbd>⌘</kbd><kbd>Q</kbd></span></div>
+          <div class="card"><span class="card-desc">Fermer la fenêtre</span><span class="keys"><kbd>⌘</kbd><kbd>W</kbd></span></div>
+          <div class="card"><span class="card-desc">Verrouiller l'appareil</span><span class="keys"><kbd>⌘</kbd><kbd>L</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Interaction</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Clavier logiciel</span><span class="keys"><kbd>⌘</kbd><kbd>K</kbd></span></div>
+          <div class="card"><span class="card-desc">Utiliser clavier Mac</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>K</kbd></span></div>
+          <div class="card"><span class="card-desc">Shake gesture</span><span class="keys"><kbd>⌃</kbd><kbd>⌘</kbd><kbd>Z</kbd></span></div>
+          <div class="card"><span class="card-desc">Siri</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>S</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Affichage & rotation</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Rotation gauche</span><span class="keys"><kbd>⌘</kbd><kbd>←</kbd></span></div>
+          <div class="card"><span class="card-desc">Rotation droite</span><span class="keys"><kbd>⌘</kbd><kbd>→</kbd></span></div>
+          <div class="card"><span class="card-desc">Taille physique</span><span class="keys"><kbd>⌘</kbd><kbd>1</kbd></span></div>
+          <div class="card"><span class="card-desc">Échelle 75%</span><span class="keys"><kbd>⌘</kbd><kbd>2</kbd></span></div>
+          <div class="card"><span class="card-desc">Échelle 50%</span><span class="keys"><kbd>⌘</kbd><kbd>3</kbd></span></div>
+          <div class="card"><span class="card-desc">Échelle 33%</span><span class="keys"><kbd>⌘</kbd><kbd>4</kbd></span></div>
+          <div class="card"><span class="card-desc">Échelle 25%</span><span class="keys"><kbd>⌘</kbd><kbd>5</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Debug & dev</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Capture d'écran</span><span class="keys"><kbd>⌘</kbd><kbd>S</kbd></span></div>
+          <div class="card"><span class="card-desc">Enregistrer vidéo</span><span class="keys"><kbd>⌘</kbd><kbd>R</kbd></span></div>
+          <div class="card"><span class="card-desc">Avertissement mémoire</span><span class="keys"><kbd>⌃</kbd><kbd>⌘</kbd><kbd>M</kbd></span></div>
+          <div class="card"><span class="card-desc">Animations lentes</span><span class="keys"><kbd>⌘</kbd><kbd>T</kbd></span></div>
+          <div class="card"><span class="card-desc">Coller dans le simulateur</span><span class="keys"><kbd>⌘</kbd><kbd>V</kbd></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- RACCOURCIS : JETBRAINS                                              -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="jetbrains" data-type="shortcuts">
+      <div class="section"><div class="section-title">Les indispensables</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc"><strong>Find Action</strong></span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>A</kbd></span></div>
+          <div class="card"><span class="card-desc">Search Everywhere</span><span class="keys"><kbd>⇧</kbd><kbd>×2</kbd></span></div>
+          <div class="card"><span class="card-desc">Fichiers récents</span><span class="keys"><kbd>⌘</kbd><kbd>E</kbd></span></div>
+          <div class="card"><span class="card-desc">Emplacements récents</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>E</kbd></span></div>
+          <div class="card"><span class="card-desc">Quick Fix / Context Actions</span><span class="keys"><kbd>⌥</kbd><kbd>↩</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Navigation</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Aller à une classe</span><span class="keys"><kbd>⌘</kbd><kbd>O</kbd></span></div>
+          <div class="card"><span class="card-desc">Aller à un fichier</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>O</kbd></span></div>
+          <div class="card"><span class="card-desc">Aller à un symbole</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>O</kbd></span></div>
+          <div class="card"><span class="card-desc">Aller à la déclaration</span><span class="keys"><kbd>⌘</kbd><kbd>B</kbd></span></div>
+          <div class="card"><span class="card-desc">Aller à l'implémentation</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>B</kbd></span></div>
+          <div class="card"><span class="card-desc">Retour en arrière</span><span class="keys"><kbd>⌘</kbd><kbd>[</kbd></span></div>
+          <div class="card"><span class="card-desc">Avancer</span><span class="keys"><kbd>⌘</kbd><kbd>]</kbd></span></div>
+          <div class="card"><span class="card-desc">Trouver les usages</span><span class="keys"><kbd>⌥</kbd><kbd>F7</kbd></span></div>
+          <div class="card"><span class="card-desc">Prochaine erreur</span><span class="keys"><kbd>F2</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Édition</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Autocomplétion</span><span class="keys"><kbd>⌃</kbd><kbd>␣</kbd></span></div>
+          <div class="card"><span class="card-desc">Smart Complete</span><span class="keys"><kbd>⌃</kbd><kbd>⇧</kbd><kbd>␣</kbd></span></div>
+          <div class="card"><span class="card-desc">Générer (getters, ctor…)</span><span class="keys"><kbd>⌘</kbd><kbd>N</kbd></span></div>
+          <div class="card"><span class="card-desc">Surround With</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>T</kbd></span></div>
+          <div class="card"><span class="card-desc">Dupliquer la ligne</span><span class="keys"><kbd>⌘</kbd><kbd>D</kbd></span></div>
+          <div class="card"><span class="card-desc">Supprimer la ligne</span><span class="keys"><kbd>⌘</kbd><kbd>⌫</kbd></span></div>
+          <div class="card"><span class="card-desc">Commenter ligne</span><span class="keys"><kbd>⌘</kbd><kbd>/</kbd></span></div>
+          <div class="card"><span class="card-desc">Commentaire bloc</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>/</kbd></span></div>
+          <div class="card"><span class="card-desc">Reformater le code</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>L</kbd></span></div>
+          <div class="card"><span class="card-desc">Optimiser les imports</span><span class="keys"><kbd>⌃</kbd><kbd>⌥</kbd><kbd>O</kbd></span></div>
+          <div class="card"><span class="card-desc">Multi-curseur</span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>clic</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Refactoring</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Menu Refactor This</span><span class="keys"><kbd>⌃</kbd><kbd>T</kbd></span></div>
+          <div class="card"><span class="card-desc">Renommer</span><span class="keys"><kbd>⇧</kbd><kbd>F6</kbd></span></div>
+          <div class="card"><span class="card-desc">Extraire variable</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>V</kbd></span></div>
+          <div class="card"><span class="card-desc">Extraire méthode</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>M</kbd></span></div>
+          <div class="card"><span class="card-desc">Extraire paramètre</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>P</kbd></span></div>
+          <div class="card"><span class="card-desc">Extraire champ</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>F</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Recherche & Run/Debug</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Rechercher projet</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>F</kbd></span></div>
+          <div class="card"><span class="card-desc">Remplacer projet</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>R</kbd></span></div>
+          <div class="card"><span class="card-desc">Rechercher fichier</span><span class="keys"><kbd>⌘</kbd><kbd>F</kbd></span></div>
+          <div class="card"><span class="card-desc">Remplacer fichier</span><span class="keys"><kbd>⌘</kbd><kbd>R</kbd></span></div>
+          <div class="card"><span class="card-desc">Exécuter</span><span class="keys"><kbd>⌃</kbd><kbd>R</kbd></span></div>
+          <div class="card"><span class="card-desc">Debug</span><span class="keys"><kbd>⌃</kbd><kbd>D</kbd></span></div>
+          <div class="card"><span class="card-desc">Toggle Breakpoint</span><span class="keys"><kbd>⌘</kbd><kbd>F8</kbd></span></div>
+          <div class="card"><span class="card-desc">Step Over</span><span class="keys"><kbd>F8</kbd></span></div>
+          <div class="card"><span class="card-desc">Step Into</span><span class="keys"><kbd>F7</kbd></span></div>
+          <div class="card"><span class="card-desc">Resume Program</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>R</kbd></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- RACCOURCIS : VS CODE                                                -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="vscode" data-type="shortcuts">
+      <div class="section"><div class="section-title">Indispensables & interface</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc"><strong>Command Palette</strong></span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>P</kbd></span></div>
+          <div class="card"><span class="card-desc">Quick Open (fichier)</span><span class="keys"><kbd>⌘</kbd><kbd>P</kbd></span></div>
+          <div class="card"><span class="card-desc">Paramètres</span><span class="keys"><kbd>⌘</kbd><kbd>,</kbd></span></div>
+          <div class="card"><span class="card-desc">Raccourcis clavier</span><span class="keys"><kbd>⌘</kbd><kbd>K</kbd><kbd>⌘</kbd><kbd>S</kbd></span></div>
+          <div class="card"><span class="card-desc">Toggle barre latérale</span><span class="keys"><kbd>⌘</kbd><kbd>B</kbd></span></div>
+          <div class="card"><span class="card-desc">Toggle panneau</span><span class="keys"><kbd>⌘</kbd><kbd>J</kbd></span></div>
+          <div class="card"><span class="card-desc">Toggle terminal</span><span class="keys"><kbd>⌃</kbd><kbd>`</kbd></span></div>
+          <div class="card"><span class="card-desc">Nouveau terminal</span><span class="keys"><kbd>⌃</kbd><kbd>⇧</kbd><kbd>`</kbd></span></div>
+          <div class="card"><span class="card-desc">Zen Mode</span><span class="keys"><kbd>⌘</kbd><kbd>K</kbd><kbd>Z</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Édition</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Commenter / décommenter</span><span class="keys"><kbd>⌘</kbd><kbd>/</kbd></span></div>
+          <div class="card"><span class="card-desc">Déplacer ligne haut/bas</span><span class="keys"><kbd>⌥</kbd><kbd>↑/↓</kbd></span></div>
+          <div class="card"><span class="card-desc">Dupliquer ligne haut/bas</span><span class="keys"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>↑/↓</kbd></span></div>
+          <div class="card"><span class="card-desc">Supprimer la ligne</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>K</kbd></span></div>
+          <div class="card"><span class="card-desc">Nouvelle ligne en dessous</span><span class="keys"><kbd>⌘</kbd><kbd>↩</kbd></span></div>
+          <div class="card"><span class="card-desc">Nouvelle ligne au-dessus</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>↩</kbd></span></div>
+          <div class="card"><span class="card-desc">Sélectionner la ligne</span><span class="keys"><kbd>⌘</kbd><kbd>L</kbd></span></div>
+          <div class="card"><span class="card-desc">Prochaine occurrence</span><span class="keys"><kbd>⌘</kbd><kbd>D</kbd></span></div>
+          <div class="card"><span class="card-desc">Multi-curseur (colonne)</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>↑/↓</kbd></span></div>
+          <div class="card"><span class="card-desc">Formatter le document</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>F</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Code & navigation</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Aller à la définition</span><span class="keys"><kbd>F12</kbd></span></div>
+          <div class="card"><span class="card-desc">Peek Definition</span><span class="keys"><kbd>⌥</kbd><kbd>F12</kbd></span></div>
+          <div class="card"><span class="card-desc">Toutes les références</span><span class="keys"><kbd>⇧</kbd><kbd>F12</kbd></span></div>
+          <div class="card"><span class="card-desc">Renommer un symbole</span><span class="keys"><kbd>F2</kbd></span></div>
+          <div class="card"><span class="card-desc">Quick Fix</span><span class="keys"><kbd>⌘</kbd><kbd>.</kbd></span></div>
+          <div class="card"><span class="card-desc">Aller à la ligne…</span><span class="keys"><kbd>⌃</kbd><kbd>G</kbd></span></div>
+          <div class="card"><span class="card-desc">Split éditeur</span><span class="keys"><kbd>⌘</kbd><kbd>\</kbd></span></div>
+          <div class="card"><span class="card-desc">Groupes d'éditeurs 1/2/3</span><span class="keys"><kbd>⌘</kbd><kbd>1..3</kbd></span></div>
+          <div class="card"><span class="card-desc">Onglet préc. / suivant</span><span class="keys"><kbd>⌃</kbd><kbd>⇥</kbd></span></div>
+          <div class="card"><span class="card-desc">Fermer l'éditeur</span><span class="keys"><kbd>⌘</kbd><kbd>W</kbd></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- RACCOURCIS : NAVIGATEURS                                            -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="browser" data-type="shortcuts">
+      <div class="section"><div class="section-title">Onglets</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Nouvel onglet</span><span class="keys"><kbd>⌘</kbd><kbd>T</kbd></span></div>
+          <div class="card"><span class="card-desc">Fermer l'onglet</span><span class="keys"><kbd>⌘</kbd><kbd>W</kbd></span></div>
+          <div class="card"><span class="card-desc">Rouvrir onglet fermé</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>T</kbd></span></div>
+          <div class="card"><span class="card-desc">Onglet suivant</span><span class="keys"><kbd>⌃</kbd><kbd>⇥</kbd></span></div>
+          <div class="card"><span class="card-desc">Onglet précédent</span><span class="keys"><kbd>⌃</kbd><kbd>⇧</kbd><kbd>⇥</kbd></span></div>
+          <div class="card"><span class="card-desc">Onglet n° 1 à 8</span><span class="keys"><kbd>⌘</kbd><kbd>1..8</kbd></span></div>
+          <div class="card"><span class="card-desc">Dernier onglet</span><span class="keys"><kbd>⌘</kbd><kbd>9</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Navigation</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Barre d'adresse</span><span class="keys"><kbd>⌘</kbd><kbd>L</kbd></span></div>
+          <div class="card"><span class="card-desc">Actualiser</span><span class="keys"><kbd>⌘</kbd><kbd>R</kbd></span></div>
+          <div class="card"><span class="card-desc">Actualiser sans cache</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>R</kbd></span></div>
+          <div class="card"><span class="card-desc">Page préc. / suiv.</span><span class="keys"><kbd>⌘</kbd><kbd>[/]</kbd></span></div>
+          <div class="card"><span class="card-desc">Recherche dans la page</span><span class="keys"><kbd>⌘</kbd><kbd>F</kbd></span></div>
+          <div class="card"><span class="card-desc">Zoom avant</span><span class="keys"><kbd>⌘</kbd><kbd>+</kbd></span></div>
+          <div class="card"><span class="card-desc">Zoom arrière</span><span class="keys"><kbd>⌘</kbd><kbd>-</kbd></span></div>
+          <div class="card"><span class="card-desc">Zoom 100%</span><span class="keys"><kbd>⌘</kbd><kbd>0</kbd></span></div>
+          <div class="card"><span class="card-desc">Défiler page entière</span><span class="keys"><kbd>␣</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Confidentialité & fenêtres</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Privée (Chrome)</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>N</kbd></span></div>
+          <div class="card"><span class="card-desc">Privée (Safari/Firefox)</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>P</kbd></span></div>
+          <div class="card"><span class="card-desc">Historique</span><span class="keys"><kbd>⌘</kbd><kbd>Y</kbd></span></div>
+          <div class="card"><span class="card-desc">Téléchargements (Chrome)</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>J</kbd></span></div>
+          <div class="card"><span class="card-desc">Favoris / Signets</span><span class="keys"><kbd>⌘</kbd><kbd>D</kbd></span></div>
+          <div class="card"><span class="card-desc">Effacer données</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>⌫</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">DevTools</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">DevTools (Chrome/Edge)</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>I</kbd></span></div>
+          <div class="card"><span class="card-desc">Console (Chrome/Edge)</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>J</kbd></span></div>
+          <div class="card"><span class="card-desc">Inspecter un élément</span><span class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>C</kbd></span></div>
+          <div class="card"><span class="card-desc">Afficher code source</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>U</kbd></span></div>
+          <div class="card"><span class="card-desc">Inspecteur (Safari)</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>I</kbd></span></div>
+          <div class="card"><span class="card-desc">Console JS (Safari)</span><span class="keys"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>C</kbd></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- RACCOURCIS : TERMINAL                                               -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="terminal" data-type="shortcuts">
+      <div class="section"><div class="section-title">Navigation dans la ligne</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Début de la ligne</span><span class="keys"><kbd>⌃</kbd><kbd>A</kbd></span></div>
+          <div class="card"><span class="card-desc">Fin de la ligne</span><span class="keys"><kbd>⌃</kbd><kbd>E</kbd></span></div>
+          <div class="card"><span class="card-desc">Avancer d'un caractère</span><span class="keys"><kbd>⌃</kbd><kbd>F</kbd></span></div>
+          <div class="card"><span class="card-desc">Reculer d'un caractère</span><span class="keys"><kbd>⌃</kbd><kbd>B</kbd></span></div>
+          <div class="card"><span class="card-desc">Avancer d'un mot</span><span class="keys"><kbd>⌥</kbd><kbd>F</kbd></span></div>
+          <div class="card"><span class="card-desc">Reculer d'un mot</span><span class="keys"><kbd>⌥</kbd><kbd>B</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Édition de la ligne</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Effacer jusqu'au début</span><span class="keys"><kbd>⌃</kbd><kbd>U</kbd></span></div>
+          <div class="card"><span class="card-desc">Effacer jusqu'à la fin</span><span class="keys"><kbd>⌃</kbd><kbd>K</kbd></span></div>
+          <div class="card"><span class="card-desc">Effacer le mot précédent</span><span class="keys"><kbd>⌃</kbd><kbd>W</kbd></span></div>
+          <div class="card"><span class="card-desc">Coller texte effacé</span><span class="keys"><kbd>⌃</kbd><kbd>Y</kbd></span></div>
+          <div class="card"><span class="card-desc">Échanger caractères</span><span class="keys"><kbd>⌃</kbd><kbd>T</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Contrôle des processus</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Interrompre (SIGINT)</span><span class="keys"><kbd>⌃</kbd><kbd>C</kbd></span></div>
+          <div class="card"><span class="card-desc">EOF / quitter shell</span><span class="keys"><kbd>⌃</kbd><kbd>D</kbd></span></div>
+          <div class="card"><span class="card-desc">Suspendre (SIGTSTP)</span><span class="keys"><kbd>⌃</kbd><kbd>Z</kbd></span></div>
+          <div class="card"><span class="card-desc">Effacer l'écran</span><span class="keys"><kbd>⌃</kbd><kbd>L</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Historique</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Recherche reverse-i</span><span class="keys"><kbd>⌃</kbd><kbd>R</kbd></span></div>
+          <div class="card"><span class="card-desc">Commande préc./suiv.</span><span class="keys"><kbd>⌃</kbd><kbd>P/N</kbd></span></div>
+          <div class="card"><span class="card-desc">Dernier argument préc.</span><span class="keys"><kbd>⌥</kbd><kbd>.</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Terminal.app (macOS)</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Nouvel onglet</span><span class="keys"><kbd>⌘</kbd><kbd>T</kbd></span></div>
+          <div class="card"><span class="card-desc">Nouvelle fenêtre</span><span class="keys"><kbd>⌘</kbd><kbd>N</kbd></span></div>
+          <div class="card"><span class="card-desc">Fermer l'onglet</span><span class="keys"><kbd>⌘</kbd><kbd>W</kbd></span></div>
+          <div class="card"><span class="card-desc">Effacer l'écran</span><span class="keys"><kbd>⌘</kbd><kbd>K</kbd></span></div>
+          <div class="card"><span class="card-desc">Split panneau</span><span class="keys"><kbd>⌘</kbd><kbd>D</kbd></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MOP : GIT                                                           -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="git" data-type="mop">
+
+      <div class="page-header">
+        <div class="page-eyebrow">Mode opératoire · Niveau débutant</div>
+        <h1 class="page-title">Git, <em>du clone au push</em></h1>
+        <p class="page-intro">Les scénarios que tu vas vraiment rencontrer, expliqués pas à pas. Chaque commande est copiable en un clic.</p>
+      </div>
+
+      <section class="section" id="git-concepts">
+        <h2 class="mop-section-title">Les concepts en 2 minutes</h2>
+        <p class="section-subtitle">Avant de taper quoi que ce soit, les 4 idées qui rendent Git compréhensible.</p>
+
+        <div class="scenario">
+          <div class="scenario-title">Un dépôt (repo) est un dossier + son historique</div>
+          <div class="scenario-desc">Quand tu tapes <code>git init</code> dans un dossier, Git crée un sous-dossier caché <code>.git/</code> qui contient <strong>toute l'histoire</strong> de tes fichiers : chaque modification, chaque auteur, chaque date. Tu peux naviguer dans le temps, revenir à n'importe quel état passé.</div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Les 3 zones : working directory, staging, historique</div>
+          <div class="scenario-desc">
+            <strong>Working directory</strong> : tes fichiers tels que tu les vois dans Finder ou Rider.<br>
+            <strong>Staging (index)</strong> : la « salle d'attente ». Tu y mets les fichiers que tu veux inclure dans ton prochain commit, avec <code>git add</code>.<br>
+            <strong>Historique (repo)</strong> : la photothèque. Tu y ajoutes un cliché de la staging avec <code>git commit</code>.
+          </div>
+          <div class="callout tip"><span class="callout-icon">💡</span><div>Mémo visuel : tu <strong>add</strong> (tu mets dans le panier), puis tu <strong>commit</strong> (tu passes en caisse). Tant que tu n'as pas commité, rien n'est gravé.</div></div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Une branche, c'est une ligne de développement</div>
+          <div class="scenario-desc">Par défaut tu es sur <code>main</code> (ou <code>master</code> sur les anciens repos). Quand tu veux essayer quelque chose sans casser l'existant, tu crées une branche. C'est isolé. Si ça marche, tu la fusionnes dans <code>main</code>. Si ça ne marche pas, tu la jettes — <strong>rien n'est perdu</strong> côté <code>main</code>.</div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Local vs distant (remote)</div>
+          <div class="scenario-desc">Ton repo est sur ton Mac. Une copie est sur GitHub/GitLab/Azure DevOps — c'est le <strong>remote</strong>, appelé par convention <code>origin</code>. Tu <code>push</code> pour envoyer tes commits vers le remote, tu <code>pull</code> pour récupérer les commits des autres.</div>
+        </div>
+      </section>
+
+      <section class="section" id="git-config">
+        <h2 class="mop-section-title">Configuration initiale</h2>
+        <p class="section-subtitle">À faire une seule fois par machine.</p>
+
+        <div class="scenario">
+          <div class="scenario-title">Dire à Git qui tu es</div>
+          <div class="scenario-desc">Chaque commit porte ton nom et ton email. C'est obligatoire, sinon Git refuse de commiter. L'email doit idéalement correspondre à celui de ton compte GitHub/GitLab pour que tes contributions soient reliées à ton profil.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> config --global user.name <span class="sh-str">"Alexandre Dupont"</span>
+<span class="sh-func">git</span> config --global user.email <span class="sh-str">"alexandre@piscines-desjoyaux.com"</span></code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Choisir l'éditeur par défaut</div>
+          <div class="scenario-desc">Git ouvre parfois un éditeur (pour écrire un message de commit détaillé, pour un rebase interactif…). Mieux vaut choisir un éditeur que tu maîtrises — sinon Git ouvre <code>vim</code> et c'est l'angoisse assurée si tu ne connais pas.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash — VS Code</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> config --global core.editor <span class="sh-str">"code --wait"</span></code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash — nano (simple, conseillé si tu débutes)</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> config --global core.editor <span class="sh-str">"nano"</span></code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Nommer la branche principale "main"</div>
+          <div class="scenario-desc">Les nouveaux repos utilisent <code>main</code> au lieu de <code>master</code>. Configure-le pour que tous tes futurs <code>git init</code> adoptent cette convention.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> config --global init.defaultBranch main</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Vérifier la config</div>
+          <div class="scenario-desc">Pour voir toute ta configuration globale et vérifier qu'elle est correcte.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> config --global --list</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="git-quotidien">
+        <h2 class="mop-section-title">Le travail au quotidien</h2>
+        <p class="section-subtitle">Le cycle normal : je modifie, je vérifie, je commite. 95% de l'usage de Git.</p>
+
+        <div class="scenario">
+          <div class="scenario-title">Cloner un projet existant</div>
+          <div class="scenario-desc">C'est souvent ton point d'entrée : tu récupères un projet depuis un serveur. Git crée un dossier avec le nom du projet et y télécharge toute l'histoire.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> clone https://github.com/monorga/monprojet.git
+<span class="sh-func">cd</span> monprojet</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Initier un repo dans un dossier existant</div>
+          <div class="scenario-desc">Tu as déjà un dossier avec du code et tu veux le versionner. <code>git init</code> transforme le dossier en repo Git.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">cd</span> /chemin/vers/mon-projet
+<span class="sh-func">git</span> init
+<span class="sh-func">git</span> add .
+<span class="sh-func">git</span> commit -m <span class="sh-str">"Initial commit"</span></code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Voir ce qui a changé : <code>git status</code></div>
+          <div class="scenario-desc">La commande que tu tapes le plus souvent. Elle te dit : <strong>quels fichiers ont été modifiés</strong>, lesquels sont <strong>prêts à être commités</strong>, et lesquels sont <strong>nouveaux / non suivis</strong>.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> status</code></pre>
+          </div>
+          <div class="callout tip"><span class="callout-icon">💡</span><div>Réflexe : tape <code>git status</code> <strong>avant chaque</strong> <code>add</code> et <code>commit</code>.</div></div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Voir les lignes modifiées : <code>git diff</code></div>
+          <div class="scenario-desc"><code>git status</code> te dit <em>quels</em> fichiers ont bougé. <code>git diff</code> te montre <em>quelles lignes</em> ont bougé. Rouge = supprimé, vert = ajouté.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment"># Voir les modifs pas encore ajoutées au staging</span>
+<span class="sh-func">git</span> diff
+
+<span class="sh-comment"># Voir les modifs déjà dans le staging (après git add)</span>
+<span class="sh-func">git</span> diff --staged</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Enregistrer des modifications (add + commit)</div>
+          <div class="scenario-desc">Le geste de base. Tu ajoutes des fichiers au staging avec <code>add</code>, puis tu crées un commit avec <code>commit -m "message"</code>. Le message doit décrire <strong>ce que fait le changement</strong>.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment"># Ajouter un fichier précis</span>
+<span class="sh-func">git</span> add src/Services/TicketService.cs
+
+<span class="sh-comment"># Ajouter tout ce qui a changé dans le dossier courant</span>
+<span class="sh-func">git</span> add .
+
+<span class="sh-comment"># Commiter ce qui est dans le staging</span>
+<span class="sh-func">git</span> commit -m <span class="sh-str">"Ajoute la validation des dates sur les tickets"</span></code></pre>
+          </div>
+          <div class="callout"><span class="callout-icon">✏️</span><div>Bonne pratique : verbe à l'infinitif ou au présent ("Ajouter X", "Corriger Y", "Refactorer Z"). 50 caractères max pour la première ligne.</div></div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Voir l'historique : <code>git log</code></div>
+          <div class="scenario-desc">Pour voir la liste des commits. Par défaut verbeux — la version courte avec <code>--oneline</code> est souvent plus lisible.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment"># Version complète (q pour quitter)</span>
+<span class="sh-func">git</span> log
+
+<span class="sh-comment"># Version courte et jolie</span>
+<span class="sh-func">git</span> log --oneline --graph --all --decorate</code></pre>
+          </div>
+          <div class="callout tip"><span class="callout-icon">💡</span><div>Crée un alias : <code>git config --global alias.lg "log --oneline --graph --all --decorate"</code>. Ensuite tu tapes juste <code>git lg</code>.</div></div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Ignorer des fichiers (.gitignore)</div>
+          <div class="scenario-desc">Certains fichiers ne doivent <strong>jamais</strong> partir dans Git : <code>bin/</code>, <code>obj/</code>, <code>node_modules/</code>, <code>.env</code>, fichiers de build. Tu crées un <code>.gitignore</code> à la racine du projet.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">.gitignore (exemple .NET + Angular)</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment"># .NET</span>
+bin/
+obj/
+*.user
+*.suo
+
+<span class="sh-comment"># Node / Angular</span>
+node_modules/
+dist/
+.angular/
+
+<span class="sh-comment"># macOS</span>
+.DS_Store
+
+<span class="sh-comment"># Secrets et config locale</span>
+.env
+.env.local
+appsettings.Development.json</code></pre>
+          </div>
+          <div class="callout warn"><span class="callout-icon">⚠️</span><div>Crée ton <code>.gitignore</code> <strong>avant</strong> ton premier <code>git add .</code>. Si un fichier a déjà été commité, <code>git rm --cached &lt;fichier&gt;</code> pour le sortir de l'historique.</div></div>
+        </div>
+      </section>
+
+      <section class="section" id="git-branches">
+        <h2 class="mop-section-title">Branches & fusion</h2>
+        <p class="section-subtitle">Isoler un travail, puis le réintégrer dans <code>main</code>.</p>
+
+        <div class="scenario">
+          <div class="scenario-title">Lister les branches</div>
+          <div class="scenario-desc">L'étoile <code>*</code> indique la branche sur laquelle tu es.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment"># Branches locales</span>
+<span class="sh-func">git</span> branch
+
+<span class="sh-comment"># Toutes les branches (locales + distantes)</span>
+<span class="sh-func">git</span> branch -a</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Créer une nouvelle branche et s'y placer</div>
+          <div class="scenario-desc">Scénario typique : tu vas ajouter une fonctionnalité. Convention : <code>feature/xxx</code> pour une feature, <code>fix/xxx</code> pour un bug.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment"># Raccourci : créer ET basculer dessus en une seule commande</span>
+<span class="sh-func">git</span> switch -c feature/export-excel
+
+<span class="sh-comment"># Équivalent avec l'ancienne commande</span>
+<span class="sh-func">git</span> checkout -b feature/export-excel</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Basculer vers une branche existante</div>
+          <div class="scenario-desc">Git change le contenu de tes fichiers pour refléter l'état de la branche cible.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> switch main
+<span class="sh-func">git</span> switch feature/export-excel</code></pre>
+          </div>
+          <div class="callout warn"><span class="callout-icon">⚠️</span><div>Git refuse de changer de branche si tu as des modifs non commitées qui entrent en conflit. Commite ou utilise <code>git stash</code>.</div></div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Fusionner une branche dans main (merge)</div>
+          <div class="scenario-desc">Tu te places sur <code>main</code> puis tu <code>merge</code> ta branche.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> switch main
+<span class="sh-func">git</span> merge feature/export-excel</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Supprimer une branche fusionnée</div>
+          <div class="scenario-desc">Une fois fusionnée, la branche ne sert plus à rien en local. On la supprime pour garder un environnement propre.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> branch -d feature/export-excel</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Gérer un conflit de fusion</div>
+          <div class="scenario-desc">Git ne peut pas fusionner automatiquement si deux branches ont modifié les mêmes lignes. Il marque les zones conflictuelles avec <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash — workflow de résolution</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment"># 1. Ouvre les fichiers en conflit dans Rider / VS Code, choisis ce que tu gardes</span>
+
+<span class="sh-comment"># 2. Marque le conflit comme résolu</span>
+<span class="sh-func">git</span> add &lt;fichier-resolu&gt;
+
+<span class="sh-comment"># 3. Termine le merge</span>
+<span class="sh-func">git</span> commit
+
+<span class="sh-comment"># Pour abandonner et revenir à avant :</span>
+<span class="sh-func">git</span> merge --abort</code></pre>
+          </div>
+          <div class="callout tip"><span class="callout-icon">💡</span><div>Rider et VS Code ont une interface graphique excellente pour résoudre les conflits. Utilise-la plutôt que d'éditer les chevrons à la main.</div></div>
+        </div>
+      </section>
+
+      <section class="section" id="git-erreurs">
+        <h2 class="mop-section-title">Rattraper une erreur</h2>
+        <p class="section-subtitle">Tu t'es planté. Respire — Git garde presque tout.</p>
+
+        <div class="scenario">
+          <div class="scenario-title">J'ai modifié un fichier, je veux revenir en arrière</div>
+          <div class="scenario-desc">Tu as bidouillé un fichier, tu veux le remettre comme il était lors du dernier commit.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment"># Annule les modifs d'un fichier précis (non commité)</span>
+<span class="sh-func">git</span> restore src/Services/TicketService.cs
+
+<span class="sh-comment"># Annule TOUTES les modifs non commitées</span>
+<span class="sh-func">git</span> restore .</code></pre>
+          </div>
+          <div class="callout warn"><span class="callout-icon">⚠️</span><div>Cette commande <strong>supprime définitivement</strong> tes modifs non commitées. En cas de doute, commite d'abord sur une branche temporaire ou utilise <code>git stash</code>.</div></div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">J'ai fait <code>git add</code> par erreur</div>
+          <div class="scenario-desc">Tu veux sortir un fichier du staging sans perdre tes modifs.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> restore --staged src/secrets.json</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">J'ai commité et le message est mauvais</div>
+          <div class="scenario-desc">Tant que tu n'as <strong>pas push</strong>, tu peux corriger le message.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> commit --amend -m <span class="sh-str">"Le bon message cette fois"</span></code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">J'ai oublié un fichier dans mon dernier commit</div>
+          <div class="scenario-desc">Tu ajoutes le fichier au commit précédent avec <code>--amend</code> plutôt qu'un nouveau commit "oups".</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> add le-fichier-oublie.cs
+<span class="sh-func">git</span> commit --amend --no-edit</code></pre>
+          </div>
+          <div class="callout warn"><span class="callout-icon">⚠️</span><div>N'utilise <code>--amend</code> que sur des commits <strong>locaux, pas encore pushés</strong>. Sinon tu réécris l'histoire publique.</div></div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Annuler mon dernier commit (sans perdre les modifs)</div>
+          <div class="scenario-desc">Tu reviens à avant le commit en conservant les modifs dans ton working directory.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> reset --soft HEAD~1</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Mettre mes modifs de côté temporairement (stash)</div>
+          <div class="scenario-desc">Tu es en plein travail, un fix urgent arrive. Tu sauvegardes ton travail en cours sans commiter, puis le retrouves.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment"># Mettre de côté tes modifs en cours</span>
+<span class="sh-func">git</span> stash push -m <span class="sh-str">"WIP formulaire ticket"</span>
+
+<span class="sh-comment"># Voir la liste des stashes</span>
+<span class="sh-func">git</span> stash list
+
+<span class="sh-comment"># Récupérer le dernier stash (et le supprimer de la liste)</span>
+<span class="sh-func">git</span> stash pop</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="git-collab">
+        <h2 class="mop-section-title">Collaboration (push / pull)</h2>
+        <p class="section-subtitle">Échanger avec le serveur distant : envoyer ton travail et récupérer celui des autres.</p>
+
+        <div class="scenario">
+          <div class="scenario-title">Envoyer ses commits vers le serveur : <code>git push</code></div>
+          <div class="scenario-desc">Premier push d'une branche : utilise <code>-u</code> ("upstream") pour dire à Git où pousser. Ensuite un simple <code>git push</code> suffit.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment"># Premier push d'une nouvelle branche</span>
+<span class="sh-func">git</span> push -u origin feature/export-excel
+
+<span class="sh-comment"># Push suivant sur la même branche</span>
+<span class="sh-func">git</span> push</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Récupérer les commits des autres : <code>git pull</code></div>
+          <div class="scenario-desc"><code>pull</code> fait deux choses : télécharger les commits (<code>fetch</code>) et les fusionner dans ta branche courante (<code>merge</code>).</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> pull</code></pre>
+          </div>
+          <div class="callout tip"><span class="callout-icon">💡</span><div>Habitude à prendre : <strong>pull avant de commencer à bosser</strong>, surtout le matin. Tu évites de travailler sur une version obsolète.</div></div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Voir ce qu'il y a sur le serveur sans fusionner : <code>git fetch</code></div>
+          <div class="scenario-desc">Parfois tu veux juste voir ce qui est arrivé sur le serveur sans fusionner tout de suite.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> fetch
+
+<span class="sh-comment"># Puis voir ce qui est arrivé</span>
+<span class="sh-func">git</span> log --oneline HEAD..origin/main</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Lier un projet local à un repo GitHub</div>
+          <div class="scenario-desc">Tu as créé un repo sur GitHub via le site, tu veux connecter ton projet local dessus.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> remote add origin https://github.com/ton-user/ton-repo.git
+<span class="sh-func">git</span> branch -M main
+<span class="sh-func">git</span> push -u origin main</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="git-cheatsheet">
+        <h2 class="mop-section-title">Cheat sheet</h2>
+        <p class="section-subtitle">Les commandes les plus utilisées, en un coup d'œil.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th style="width:240px">Commande</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>git status</code></td><td>Où j'en suis ? Quels fichiers ont bougé ?</td></tr>
+              <tr><td><code>git diff</code></td><td>Voir le détail des lignes modifiées</td></tr>
+              <tr><td><code>git add .</code></td><td>Mettre toutes les modifs dans le staging</td></tr>
+              <tr><td><code>git commit -m "msg"</code></td><td>Enregistrer un commit avec un message</td></tr>
+              <tr><td><code>git log --oneline</code></td><td>Voir l'historique en version courte</td></tr>
+              <tr><td><code>git branch</code></td><td>Lister les branches</td></tr>
+              <tr><td><code>git switch -c &lt;nom&gt;</code></td><td>Créer une branche et basculer dessus</td></tr>
+              <tr><td><code>git switch &lt;nom&gt;</code></td><td>Basculer vers une branche existante</td></tr>
+              <tr><td><code>git merge &lt;branche&gt;</code></td><td>Fusionner une branche dans la courante</td></tr>
+              <tr><td><code>git pull</code></td><td>Récupérer les commits du serveur</td></tr>
+              <tr><td><code>git push</code></td><td>Envoyer ses commits au serveur</td></tr>
+              <tr><td><code>git stash push -m "msg"</code></td><td>Mettre les modifs de côté</td></tr>
+              <tr><td><code>git stash pop</code></td><td>Récupérer les modifs mises de côté</td></tr>
+              <tr><td><code>git restore &lt;fichier&gt;</code></td><td>Annuler les modifs d'un fichier</td></tr>
+              <tr><td><code>git commit --amend</code></td><td>Modifier le dernier commit</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MOP : CLAUDE CODE                                                   -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="claude-code" data-type="mop">
+
+      <div class="page-header">
+        <div class="page-eyebrow">Mode opératoire · Niveau débutant</div>
+        <h1 class="page-title">Claude Code, <em>l'agent dev dans ton terminal</em></h1>
+        <p class="page-intro">Un agent qui vit dans ton terminal (ou dans Rider / VS Code via plugin) et qui peut lire, modifier, créer des fichiers, exécuter des commandes. Tu lui parles en langage naturel, il agit sur ton projet.</p>
+      </div>
+
+      <section class="section" id="cc-installation">
+        <h2 class="mop-section-title">Installation</h2>
+        <p class="section-subtitle">Prérequis : Node.js 18+ sur ta machine.</p>
+
+        <div class="scenario">
+          <div class="scenario-title">Installer Claude Code via npm</div>
+          <div class="scenario-desc">Commande officielle, identique sur macOS et Windows. Installe le binaire <code>claude</code> accessible depuis n'importe quel terminal.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash / zsh / PowerShell</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Vérifier l'installation et se connecter</div>
+          <div class="scenario-desc">Au premier lancement, Claude Code ouvre une page d'authentification dans ton navigateur. Tu te connectes avec ton compte Anthropic (celui de ton plan Team Desjoyaux).</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment"># Vérifier que c'est bien installé</span>
+claude --version
+
+<span class="sh-comment"># Premier lancement dans un dossier de projet</span>
+<span class="sh-func">cd</span> ~/projets/mon-projet
+claude</code></pre>
+          </div>
+          <div class="callout tip"><span class="callout-icon">💡</span><div>Pour Rider, installe le plugin <strong>Claude Code for JetBrains</strong> depuis le marketplace. Tu obtiens un panneau intégré plutôt qu'un terminal externe.</div></div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Mettre à jour Claude Code</div>
+          <div class="scenario-desc">Anthropic publie des mises à jour régulières. À faire de temps en temps.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code>npm update -g @anthropic-ai/claude-code</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="cc-premier-pas">
+        <h2 class="mop-section-title">Premiers pas</h2>
+        <p class="section-subtitle">Les 3 gestes de base : ouvrir, demander, valider.</p>
+
+        <div class="scenario">
+          <div class="scenario-title">Lancer Claude Code dans un projet</div>
+          <div class="scenario-desc">Tu te places dans ton dossier de projet, tu tapes <code>claude</code>. Une interface interactive s'ouvre. Claude lit automatiquement la structure du projet.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">cd</span> ~/projets/GlpiTicketViewer
+claude</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Poser une question simple sur ton code</div>
+          <div class="scenario-desc">Commence par des questions de compréhension. Claude va lire les fichiers pertinents et te répondre. Aucune modification n'est faite à ce stade.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code>Explique-moi ce que fait le service TicketService, et dis-moi
+s'il y a des points qui te semblent fragiles ou à refactorer.</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Demander une modification simple</div>
+          <div class="scenario-desc">Claude Code propose les modifications <strong>avant</strong> de les écrire. Tu valides ou tu refuses. Rien ne touche à ton code sans ton OK.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code>Dans TicketController, ajoute un endpoint GET /tickets/count
+qui renvoie le nombre total de tickets ouverts. Mets-le juste
+après l'endpoint existant GetAll.</code></pre>
+          </div>
+          <div class="callout"><span class="callout-icon">✅</span><div>Par défaut, Claude Code te demande confirmation à chaque action. Tu peux lui donner une autorisation permanente via <code>/permissions</code>.</div></div>
+        </div>
+      </section>
+
+      <section class="section" id="cc-scenarios">
+        <h2 class="mop-section-title">Scénarios courants</h2>
+        <p class="section-subtitle">Les prompts qui marchent, par cas d'usage.</p>
+
+        <div class="scenario">
+          <div class="scenario-title">Je veux corriger un bug</div>
+          <div class="scenario-desc">Décris le <strong>symptôme observé</strong> et le <strong>comportement attendu</strong>. Laisse Claude investiguer — il lit le code, propose des hypothèses, exécute parfois les tests.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code>Bug : quand je filtre les tickets par date, le résultat exclut
+les tickets créés le jour même de la date de fin du filtre.
+Attendu : les tickets créés le jour de la date de fin doivent
+être inclus (bornes incluses).
+
+Trouve la cause et propose un correctif avec un test unitaire
+qui couvre ce cas.</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Je veux ajouter une fonctionnalité sur plusieurs fichiers</div>
+          <div class="scenario-desc">Donne une description <strong>fonctionnelle</strong> plus qu'une liste de fichiers à toucher. Claude identifie les fichiers concernés.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code>Ajoute un système de favoris sur les tickets :
+- Un utilisateur peut marquer/démarquer un ticket comme favori
+- La liste des favoris est accessible via /api/tickets/favorites
+- Stocke les favoris dans une nouvelle table UserFavorites
+- Crée la migration EF Core
+- Ajoute les tests unitaires du service
+- Ajoute les endpoints dans TicketController
+
+Commence par me proposer un plan, on validera avant d'écrire.</code></pre>
+          </div>
+          <div class="callout tip"><span class="callout-icon">💡</span><div>Le "Commence par me proposer un plan" est une excellente habitude. Tu évites que Claude parte dans une mauvaise direction.</div></div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Je veux qu'il m'explique du code</div>
+          <div class="scenario-desc">Cite le fichier avec le chemin et précise ton niveau. Claude adapte son explication.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code>Dans src/Services/TicketService.cs, la méthode ApplyFilters utilise
+des Expression&lt;Func&gt; et du PredicateBuilder. Explique-moi comment ça
+fonctionne, niveau "développeur qui connaît C# mais pas les arbres
+d'expression". Fais-moi un schéma ASCII si ça aide.</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Je veux qu'il écrive des tests</div>
+          <div class="scenario-desc">Indique le framework et les cas à couvrir. Claude génère et peut même exécuter les tests pour vérifier qu'ils passent.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code>Écris des tests xUnit pour la classe DateRangeValidator :
+- Cas nominal : plage valide
+- Cas erreur : date de début > date de fin
+- Cas limite : dates égales (doit être accepté)
+- Cas null
+
+Utilise Moq si tu as besoin de mocker des dépendances.
+Exécute les tests à la fin pour vérifier qu'ils passent tous.</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Je veux qu'il revoie mon code avant commit</div>
+          <div class="scenario-desc">Claude joue le rôle du reviewer. Il repère anti-patterns, soucis de perf, edge cases.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code>Fais une revue de code sur tous les fichiers que j'ai modifiés
+dans cette branche (compare à main). Cherche :
+- Les bugs potentiels
+- Les problèmes de performance
+- Les manques de validation d'entrée
+- Les violations SOLID
+
+Sois franc et direct, pas de politesse excessive.</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Je veux qu'il documente mon projet</div>
+          <div class="scenario-desc">Claude peut générer un README, des commentaires XML, de la JSDoc, ou un fichier d'architecture Markdown avec diagrammes Mermaid.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code>Génère un README.md complet pour ce projet :
+- Description en 3 lignes
+- Stack technique
+- Instructions d'installation et de lancement
+- Structure des dossiers (avec arbre)
+- Variables d'environnement requises
+- Diagramme Mermaid de l'architecture globale
+- Sections Contribution et License</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="cc-slash">
+        <h2 class="mop-section-title">Commandes slash</h2>
+        <p class="section-subtitle">Commandes qui contrôlent Claude Code, à taper dans la zone de prompt.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th style="width:200px">Commande</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><code>/help</code></td><td>Liste des commandes disponibles</td></tr>
+              <tr><td><code>/clear</code></td><td>Vide la conversation (oublie le contexte)</td></tr>
+              <tr><td><code>/compact</code></td><td>Résume la conversation pour libérer du contexte</td></tr>
+              <tr><td><code>/review</code></td><td>Revue de code des changements non commités</td></tr>
+              <tr><td><code>/cost</code></td><td>Coût de la session en cours</td></tr>
+              <tr><td><code>/permissions</code></td><td>Gère les autorisations</td></tr>
+              <tr><td><code>/init</code></td><td>Crée un fichier <code>CLAUDE.md</code> à la racine</td></tr>
+              <tr><td><code>/model</code></td><td>Change le modèle (Sonnet / Opus / Haiku)</td></tr>
+              <tr><td><code>/logout</code></td><td>Déconnexion du compte</td></tr>
+              <tr><td><code>/exit</code></td><td>Quitter Claude Code</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="cc-bonnes-pratiques">
+        <h2 class="mop-section-title">Bonnes pratiques</h2>
+        <p class="section-subtitle">Les habitudes qui font la différence entre un outil frustrant et un vrai partenaire.</p>
+
+        <div class="scenario">
+          <div class="scenario-title">Crée un fichier <code>CLAUDE.md</code> à la racine</div>
+          <div class="scenario-desc">Le briefing que Claude lit à chaque session : conventions de code, commandes de build/test, choses à ne jamais faire, patterns préférés. Ta vitesse est multipliée par 3.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">CLAUDE.md — exemple</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code># Projet : GLPI Ticket Viewer
+
+## Stack
+- Backend : .NET 8, EF Core 8, xUnit pour les tests
+- Frontend : Angular 19, standalone components uniquement
+- Base : PostgreSQL
+
+## Conventions
+- Toujours typer explicitement les retours de méthodes publiques
+- Pas de `var` pour les types non évidents
+- Les services héritent de `IServiceBase&lt;T&gt;`
+- Les DTOs finissent par `Dto`, les entités pas de suffixe
+
+## Commandes
+- Build  : `dotnet build`
+- Test   : `dotnet test`
+- Run    : `dotnet run --project src/Api`
+- Front  : `ng serve` depuis /web
+
+## À ne pas faire
+- Ne jamais modifier les migrations déjà appliquées en prod
+- Ne pas installer de nouveaux packages sans m'en parler</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Utilise <code>/clear</code> quand tu changes de sujet</div>
+          <div class="scenario-desc">Le contexte accumulé finit par ralentir Claude et coûter plus cher en tokens. Entre deux sujets, <code>/clear</code> pour redémarrer neuf.</div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Demande toujours un plan avant les gros changements</div>
+          <div class="scenario-desc">Pour toute modification qui touche plus de 3 fichiers, termine ton prompt par "Propose-moi un plan, on validera avant d'écrire".</div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Commite avant de laisser Claude faire de grosses modifs</div>
+          <div class="scenario-desc">Git est ton filet. Avant une grosse refonte, commit WIP. Si Claude part mal, <code>git restore .</code> te sauve.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-func">git</span> add .
+<span class="sh-func">git</span> commit -m <span class="sh-str">"WIP avant refonte par Claude"</span>
+claude</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Sois précis sur le "pourquoi"</div>
+          <div class="scenario-desc">"Remplace la boucle par un LINQ" = résultat moyen. "Remplace par un LINQ pour la lisibilité, le flux doit rester paresseux (IEnumerable, pas ToList)" = résultat pertinent.</div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Pièges à éviter</div>
+          <div class="scenario-desc">
+            <strong>Ne fais pas</strong> : autoriser tout via <code>/permissions</code> — tu perds le contrôle.<br>
+            <strong>Ne fais pas</strong> : utiliser Claude Code sur un repo non versionné.<br>
+            <strong>Ne fais pas</strong> : accepter aveuglément 200+ lignes de modifs — reviewe avant.<br>
+            <strong>Ne fais pas</strong> : lui faire toucher aux fichiers de secrets (<code>.env</code>, <code>appsettings.Production.json</code>).
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="cc-projets">
+        <h2 class="mop-section-title">Idées de projets pour apprendre</h2>
+        <p class="section-subtitle">Organisés du plus simple au plus ambitieux. Chaque projet : 5 lignes de contexte + prompt de démarrage copiable.</p>
+
+        <h3 class="level-title" style="color:var(--accent-green);">🟢 Niveau 1 — Découverte</h3>
+        <p class="level-subtitle">30 minutes à 2h par projet. Comprendre comment Claude Code lit, édite et crée des fichiers.</p>
+
+        <div class="project-grid">
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Script VBA documenté</div>
+              <span class="project-badge badge-l1">L1 · 30 min</span>
+            </div>
+            <div class="project-desc">Prends ton macro <code>MAJ()</code> optimisé sous la seconde et fais-le documenter intégralement par Claude. Tu obtiens un README markdown, un diagramme Mermaid du flux et un historique des optimisations. Excellent premier contact parce que tu connais ton code par cœur. Aucun risque — Claude ne modifie que de la doc. Tu vois immédiatement la qualité du rendu sur du code que toi seul maîtrises.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Lis le fichier macro.bas de ce dossier. Génère un README.md
+qui documente :
+- Le rôle général du macro
+- Chaque fonction (signature, rôle, I/O)
+- Un diagramme Mermaid du flux de MAJ()
+- Les points de perf critiques (I/O CSV notamment)
+Ne modifie pas le fichier .bas.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Générateur de fixtures de test</div>
+              <span class="project-badge badge-l1">L1 · 1h</span>
+            </div>
+            <div class="project-desc">Pointe Claude sur la classe <code>Ticket.cs</code> de ton GLPI Ticket Viewer et demande-lui des données de test réalistes : 50 tickets avec titres crédibles, dates échelonnées, priorités variées. Tu observes comment Claude raisonne sur du code métier réel. Le résultat est immédiatement utile pour tes dev et debug. Tu évites la saisie manuelle fastidieuse à chaque fois que tu veux tester un nouveau comportement.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Lis la classe Ticket et ses énums associés. Génère un fichier
+TicketFixtures.cs avec une méthode statique GenerateRealistic(int count)
+qui retourne count tickets crédibles :
+- Titres réalistes (bugs, demandes, incidents)
+- Dates sur les 6 derniers mois
+- Priorités distribuées naturellement
+- 5 utilisateurs fictifs assignés
+Utilise Bogus si tu veux.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Refactoring composant Angular</div>
+              <span class="project-badge badge-l1">L1 · 1h30</span>
+            </div>
+            <div class="project-desc">Prends un composant Angular trop volumineux de ton projet et demande à Claude de le découper proprement. Il extrait les types, sort les utilitaires, ajoute la JSDoc et peut migrer vers les signals Angular 19. Tu observes si Claude respecte les conventions standalone components. C'est le "clean this up" classique qui t'apprend énormément sur ses capacités de refactoring sur un vrai projet.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Analyse le composant TicketListComponent. Propose un plan de
+refactoring pour améliorer sa lisibilité :
+- Extraire les types dans ticket-list.types.ts
+- Sortir la logique de filtrage dans un service ou pipe
+- Appliquer les signals Angular 19 là où ça a du sens
+- Ajouter JSDoc sur les méthodes publiques
+Montre-moi le plan d'abord, on valide avant d'écrire.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Dotfiles / config personnalisée</div>
+              <span class="project-badge badge-l1">L1 · 1h</span>
+            </div>
+            <div class="project-desc">Fais générer un ensemble de fichiers de config système : <code>.zshrc</code> avec des alias dev utiles, <code>.gitconfig</code> avec tes alias Git, <code>.editorconfig</code> pour .NET et Angular, éventuellement un <code>starship.toml</code>. Premier contact avec la création multi-fichiers coordonnée. Aucun risque pour tes projets métier. Tu repars avec un environnement personnalisé qui accélère tes frappes au clavier au quotidien.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Crée dans ~/dotfiles les fichiers :
+- .zshrc avec alias utiles dev (.NET, git, docker)
+- .gitconfig avec mes infos et l'alias lg
+- .editorconfig standard .NET + Angular
+- install.sh qui fait des symlinks vers le home
+Demande-moi mon nom et email pour le .gitconfig.</code></pre>
+            </div>
+          </div>
+
+        </div>
+
+        <h3 class="level-title" style="color:var(--syntax-flag);">🟡 Niveau 2 — Productivité quotidienne</h3>
+        <p class="level-subtitle">Demi-journée par projet. Tu produis du code réellement livrable.</p>
+
+        <div class="project-grid">
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Pre-commit hook Git</div>
+              <span class="project-badge badge-l2">L2 · 3h</span>
+            </div>
+            <div class="project-desc">Fais construire un hook Git pre-commit qui tourne avant chaque commit : validation Conventional Commits, <code>dotnet format</code> sur les fichiers modifiés, vérification des vulnérabilités packages, exécution des tests concernés. Tu découvres la coordination multi-fichiers (hook, scripts, doc). Tu repars avec un outil qui protège réellement tes commits. Compatible Husky.Net pour une intégration propre à ton projet .NET.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Crée un hook pre-commit Git pour ce projet .NET qui :
+1. Valide le format du message (Conventional Commits)
+2. Exécute dotnet format sur les fichiers staged
+3. Vérifie les vulnérabilités via dotnet list package --vulnerable
+4. Lance les tests xUnit concernés par les fichiers modifiés
+Utilise Husky.Net. Ajoute un README d'installation.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Générateur CRUD .NET 8 complet</div>
+              <span class="project-badge badge-l2">L2 · 4h</span>
+            </div>
+            <div class="project-desc">Classique mais redoutablement productif. Tu donnes un modèle EF Core (<code>Ticket.cs</code>), Claude génère toute la stack : DTOs Create/Update/Read, service + interface, controller REST avec validation FluentValidation, tests xUnit complets, migration EF Core. LE projet qui te fait comprendre la vraie valeur de Claude Code pour ton .NET quotidien. Tu ressors avec un scaffold réutilisable à chaque nouvelle entité.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>À partir de l'entité Ticket, génère la stack CRUD complète :
+- TicketCreateDto, TicketUpdateDto, TicketReadDto
+- ITicketService + TicketService (avec IServiceBase)
+- TicketController REST (GET all, GET id, POST, PUT, DELETE)
+- FluentValidation sur les DTOs
+- Tests xUnit + Moq (nominal + erreurs) pour le service
+- Migration EF Core
+
+Propose le plan et l'arborescence des fichiers, on valide avant.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Scripts de maintenance QNAP</div>
+              <span class="project-badge badge-l2">L2 · 3h</span>
+            </div>
+            <div class="project-desc">Pour ton QNAP qui héberge CinéFamille, fais générer un kit de maintenance automatisé complet : backup PostgreSQL rotatif quotidien, nettoyage des logs Docker anciens, purge des images dangling, rapport de santé par email chaque lundi. Tu récupères un <code>docker-compose.yml</code> propre et des scripts bash bien commentés. Tu professionnalises ton hébergement perso en un après-midi, compatible Container Station QNAP.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>J'ai un QNAP qui héberge un container PostgreSQL pour mon app
+CinéFamille. Crée un dossier /scripts avec :
+- backup-db.sh : dump quotidien vers /backups/YYYY-MM-DD.sql.gz
+  avec rétention 14 jours
+- cleanup-docker.sh : purge logs &gt;30j et images dangling
+- healthcheck.sh : rapport par email via msmtp le lundi
+- crontab.txt : planifications proposées
+Tout en bash, compatible Container Station QNAP.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Connecteur SAP → Salesforce</div>
+              <span class="project-badge badge-l2">L2 · 5h</span>
+            </div>
+            <div class="project-desc">Projet qui résonne avec tes workstreams EDIFACT/Polytropic. Fais construire une console app .NET qui lit un fichier EDIFACT ORDERS, détecte l'encodage (UNOC/UTF-8), parse les segments et génère le payload JSON pour l'API REST Salesforce. Tu réutilises tes connaissances d'encodage. Tu obtiens un PoC concret démontrable en interne lors de discussions sur l'intégration SAP/Salesforce, avec tests unitaires et logs structurés.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Crée une console app .NET 8 EdifactToSalesforce qui :
+1. Lit un fichier EDIFACT ORDERS (encodage UNOC ou UTF-8 auto-détecté)
+2. Parse les segments UNH, BGM, NAD, LIN, QTY
+3. Mappe vers une classe SalesforceOrder
+4. Sérialise en JSON pour l'API REST Salesforce
+5. Log dans la console et dans un fichier /logs/run.log
+
+Fournis 2 fichiers EDIFACT de test dans /samples et les tests xUnit
+qui valident le parsing.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Dashboard Angular de monitoring</div>
+              <span class="project-badge badge-l2">L2 · 6h</span>
+            </div>
+            <div class="project-desc">Projet plus gros, idéal pour apprendre le pilotage par étapes. Fais générer un dashboard Angular 19 standalone consommant une API REST, avec KPI cards, graphiques Chart.js, routing et lazy loading. La clé est de découper la demande : squelette, services, composants un par un. Tu apprends à piloter Claude Code sur un gros projet sans perdre le contrôle. Excellent exercice de méthodologie avant d'attaquer des projets ambitieux.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>On va construire un dashboard Angular 19 en 5 étapes, tu t'arrêtes
+à chaque étape pour que je valide. Étape 1 seulement pour l'instant :
+
+Génère le squelette du projet :
+- ng new dashboard --standalone --style=scss
+- Structure /features/dashboard, /features/tickets, /core, /shared
+- Routing avec lazy loading des features
+- Layout avec sidebar + topbar (pas de contenu encore)
+
+Quand c'est prêt, montre-moi l'arborescence et attends mon OK
+avant l'étape 2.</code></pre>
+            </div>
+          </div>
+
+        </div>
+
+        <h3 class="level-title" style="color:var(--accent-red);">🟠 Niveau 3 — Projets personnels utiles</h3>
+        <p class="level-subtitle">Weekend complet. Projets qui te servent vraiment ou que tu peux démontrer en interne.</p>
+
+        <div class="project-grid">
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Extension de CinéFamille</div>
+              <span class="project-badge badge-l3">L3 · weekend</span>
+            </div>
+            <div class="project-desc">Phase 2 de ton app familiale. Fais ajouter un système de notation et d'avis par membre, une watchlist partagée, et surtout une intégration TMDb qui enrichit chaque ajout (affiche, synopsis, casting, année). Challenge : Claude doit <strong>comprendre</strong> ton code .NET 8 + PostgreSQL existant avant de modifier. Exercice parfait pour voir la vraie valeur d'un agent qui travaille sur du code legacy — même si c'est le tien.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Lis la structure actuelle de CinéFamille. On va ajouter 3 features :
+1. Notation 1-5 par utilisateur + avis texte (table Reviews)
+2. Watchlist partagée famille (table WatchlistEntries + UI)
+3. Enrichissement auto TMDb à l'ajout d'un film (service TmdbEnrichmentService)
+
+Propose-moi :
+- Les changements de schéma (migrations EF)
+- L'impact sur les services et endpoints existants
+- Les tests à ajouter
+
+On valide le plan global avant toute écriture.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Générateur de descriptions Desjoyaux</div>
+              <span class="project-badge badge-l3">L3 · weekend</span>
+            </div>
+            <div class="project-desc">En lien direct avec tes workstreams PIM et AI translation. Fais construire une CLI .NET qui lit un Excel de fiches produits, appelle l'API Anthropic pour générer la description marketing en 15 langues, et sort un Excel enrichi prêt pour ton PIM. Tu réutilises ton analyse comparative sur les traductions AI. Tu obtiens un prototype démontrable, avec modes dry-run et resume pour résilience face aux crashes.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Crée une CLI .NET 8 DesjoyauxPim qui :
+1. Lit un Excel products.xlsx (colonnes SKU, Nom, Spécifs techniques)
+2. Pour chaque produit, appelle l'API Anthropic (Claude Sonnet)
+   pour générer une description marketing dans 15 langues
+3. Sort un Excel enrichi products-enriched.xlsx
+
+Utilise ClosedXML. Permets la config des langues via appsettings.
+Ajoute un mode --dry-run et un mode --resume (reprendre après crash).
+Prompts système dans /prompts en .md, versionnés.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Outil d'audit SAP transactions</div>
+              <span class="project-badge badge-l3">L3 · weekend</span>
+            </div>
+            <div class="project-desc">Projet qui s'inscrit parfaitement dans ton initiative PRI et data governance. Claude te construit un outil qui parse les exports SM20 / ST03N, identifie qui a utilisé quelles transactions sur une période, croise avec les rôles SUIM et génère un rapport HTML interactif. Tu gagnes un outil réellement utilisable au bureau. Preuve concrète à la DSI que l'IA accélère significativement l'audit SAP sur des cas de gouvernance complexes.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Je t'explique : j'audite l'usage de transactions SAP sensibles (PRI).
+J'ai 3 exports CSV : SM20 (logs audit), ST03N (stats usage), SUIM (rôles).
+Crée un outil .NET console SapAuditor qui :
+1. Parse les 3 CSV (structures à adapter, je te montre un échantillon)
+2. Croise : quel user a utilisé quelle transaction, avec quel rôle
+3. Flag les transactions sensibles d'après une liste /config/sensitive-tcodes.json
+4. Génère un rapport HTML interactif (tri, filtres, export CSV)
+
+Commence par me demander un échantillon des 3 CSV.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">App Flutter compagnon GLPI</div>
+              <span class="project-badge badge-l3">L3 · weekend</span>
+            </div>
+            <div class="project-desc">Pour mettre un pied dans Flutter sur un cas métier que tu connais par cœur. Claude construit une app mobile compagnon de ton GLPI Ticket Viewer : login JWT, liste tickets avec pull-to-refresh, détails, filtres, création rapide. Tu apprends Flutter en mode supervision sans rédiger les Widgets toi-même. Tu ressors avec une app mobile que tu peux faire tester en interne par quelques collègues franchisés pilotes.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>On crée glpi_companion, app Flutter compagnon du GLPI Ticket Viewer.
+Étape 1 (on valide avant d'aller plus loin) :
+- flutter create avec architecture clean (data/domain/presentation)
+- Routing via go_router
+- State management : riverpod
+- Écran LoginScreen avec saisie URL API + login/password, stockage token JWT
+  via flutter_secure_storage
+- Écran TicketListScreen (squelette vide pour l'instant)
+
+Quand c'est prêt, montre-moi la structure et on enchaîne.</code></pre>
+            </div>
+          </div>
+
+        </div>
+
+        <h3 class="level-title" style="color:var(--syntax-keyword);">🔴 Niveau 4 — Projets ambitieux</h3>
+        <p class="level-subtitle">Plusieurs semaines. Projets stratégiques à fort impact professionnel.</p>
+
+        <div class="project-grid">
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Agent de supervision DSI</div>
+              <span class="project-badge badge-l4">L4 · 2-3 semaines</span>
+            </div>
+            <div class="project-desc">Le projet le plus transformateur pour ton poste. Un agent qui surveille plusieurs sources critiques — jobs SAP, santé API Salesforce, tickets GLPI prioritaires, containers Docker du NAS — et envoie des alertes contextuelles avec recommandation d'action générée par Claude. Un vrai projet d'agent AI orchestré. Si tu le réussis, tu dotes toute ton équipe d'un outil qui gagne concrètement du temps et révolutionne ta posture DSI.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Projet DsiSupervisor : agent qui monitore et alerte.
+
+Phase 1 (cadrage, pas encore de code) : propose-moi une architecture
+pour un agent qui :
+- Tourne en tâche de fond (service Windows ou Docker)
+- Sonde périodiquement : SAP jobs (SM37), Salesforce API health, GLPI,
+  containers Docker NAS
+- Quand une anomalie : enrichit avec le contexte + appelle Claude pour
+  proposer une action, puis notifie (Teams ou email)
+- Memory : évite les alertes doublons
+
+Propose 3 stacks techniques possibles avec pros/cons, on choisit
+ensemble.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Assistant migration Extrabat</div>
+              <span class="project-badge badge-l4">L4 · 2 semaines</span>
+            </div>
+            <div class="project-desc">Directement connecté à ton projet de remplacement Extrabat/Salesforce. Fais construire un outil qui ingère les exports Extrabat, analyse leur structure automatiquement, propose un mapping vers les objets Salesforce standard et génère les fiches Excel pour validation avec tes franchisés. Tu automatises une tâche qui prendrait des mois en manuel. Valeur directe pour ton projet ERP et accélération significative de la phase de cadrage.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Projet ExtrabatMigration : assistant de mapping.
+
+Phase de cadrage : analyse ces 5 exports CSV Extrabat (je te les dépose).
+Objectif final : outil qui
+1. Profile chaque table (cardinalité, valeurs distinctes, % null)
+2. Propose un mapping vers des objets Salesforce standard (Account,
+   Contact, Product2, Opportunity, Quote)
+3. Détecte les champs custom probables
+4. Génère un Excel de proposition de mapping avec taux de confiance
+5. Permet à un utilisateur de valider/ajuster et régénère l'Excel
+
+Commence par me demander les 5 CSV et propose un plan de travail.</code></pre>
+            </div>
+          </div>
+
+          <div class="project">
+            <div class="project-header">
+              <div class="project-title">Doc interne SAP auto-générée</div>
+              <span class="project-badge badge-l4">L4 · 2-3 semaines</span>
+            </div>
+            <div class="project-desc">Outil interne qui lit tes exports de transactions SAP (tables, vues, programmes custom, variantes SHD0) et génère une documentation HTML navigable avec recherche, captures d'écran associées et liens croisés entre transactions liées. Tu documentes une fois, tu capitalises pendant des années. Base de connaissance vivante pour toute la DSI Desjoyaux. Exactement le genre de livrable structurant qui impressionne en CODIR.</div>
+            <div class="project-prompt-label">Prompt de démarrage</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn">📋 Copier</button></div>
+              <pre><code>Projet SapDocPortal : générateur de doc interne SAP.
+
+Phase cadrage. Je dispose de :
+- Export SE11 (structures tables)
+- Export SE93 (transactions + programmes associés)
+- Export SHD0 (variantes d'écran custom Desjoyaux)
+- Captures d'écran PNG dans /screenshots (naming : TCODE.png)
+
+Livrable : site statique HTML (généré par une CLI .NET) avec :
+- Une page par transaction
+- Moteur de recherche client (lunr.js par ex.)
+- Liens croisés auto entre transactions liées
+- Intégration captures d'écran si présentes
+- Recherche par mots-clés métier
+
+Propose l'architecture et la stack, on itère.</code></pre>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="callout tip" style="margin-top:32px"><span class="callout-icon">🎯</span><div><strong>Parcours conseillé :</strong> commence par <em>Script VBA documenté</em> (L1), enchaîne avec <em>Générateur de CRUD .NET 8</em> (L2) pour voir la vraie puissance, puis saute sur <em>Extension de CinéFamille</em> (L3). Après ces 3 projets, tu auras le recul pour attaquer un L4 stratégique.</div></div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+  // =============================================================
+  // NAVIGATION
+  // =============================================================
+  const navItems = document.querySelectorAll('.nav-item[data-page]');
+  const pages = document.querySelectorAll('.page');
+  const sidebar = document.getElementById('sidebar');
+  const menuToggle = document.getElementById('menuToggle');
+  const shortcutsHeader = document.getElementById('shortcutsHeader');
+  const searchInput = document.getElementById('global-search');
+  const searchBanner = document.getElementById('searchBanner');
+  const noResults = document.getElementById('noResults');
+
+  function switchPage(pageKey) {
+    navItems.forEach(n => n.classList.toggle('active', n.dataset.page === pageKey));
+    pages.forEach(p => p.classList.toggle('active', p.dataset.page === pageKey));
+    const activePage = document.querySelector(`.page[data-page="${pageKey}"]`);
+    if (activePage) {
+      shortcutsHeader.style.display = activePage.dataset.type === 'shortcuts' ? '' : 'none';
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    sidebar.classList.remove('open');
+  }
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      if (searchInput.value) {
+        searchInput.value = '';
+        clearSearch();
+      }
+      switchPage(item.dataset.page);
+    });
+  });
+
+  // Init: show shortcuts header by default
+  shortcutsHeader.style.display = '';
+
+  // =============================================================
+  // MENU MOBILE
+  // =============================================================
+  menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 900
+        && !sidebar.contains(e.target)
+        && e.target !== menuToggle
+        && sidebar.classList.contains('open')) {
+      sidebar.classList.remove('open');
+    }
+  });
+
+  // =============================================================
+  // COPY BUTTONS
+  // =============================================================
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const codeBlock = btn.closest('.code-block');
+      const pre = codeBlock.querySelector('pre');
+      const text = pre.innerText;
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = btn.innerHTML;
+        btn.innerHTML = '✓ Copié !';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = original;
+          btn.classList.remove('copied');
+        }, 1600);
+      } catch (err) {
+        alert('La copie a échoué — copie manuelle nécessaire.');
+      }
+    });
+  });
+
+  // =============================================================
+  // ANCHOR LINKS (sidebar sub-items)
+  // =============================================================
+  document.querySelectorAll('.nav-sub a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href').substring(1);
+      const target = document.getElementById(targetId);
+      if (target) {
+        const parentPage = target.closest('.page');
+        if (parentPage && !parentPage.classList.contains('active')) {
+          switchPage(parentPage.dataset.page);
+        }
+        setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        sidebar.classList.remove('open');
+      }
+    });
+  });
+
+  // =============================================================
+  // GLOBAL SEARCH
+  // =============================================================
+  function clearSearch() {
+    searchBanner.classList.remove('show');
+    noResults.classList.remove('show');
+    pages.forEach(p => {
+      p.style.display = '';
+      p.querySelectorAll('.card, .scenario, .project, tbody tr').forEach(el => el.style.display = '');
+      p.querySelectorAll('.section').forEach(s => s.style.display = '');
+    });
+    // Restaurer la visibilité selon la page active
+    const activePage = document.querySelector('.page.active');
+    pages.forEach(p => {
+      p.classList.toggle('active', p === activePage);
+    });
+    // Restaurer header raccourcis si la page active est de type shortcuts
+    if (activePage) {
+      shortcutsHeader.style.display = activePage.dataset.type === 'shortcuts' ? '' : 'none';
+    }
+  }
+
+  function runSearch(q) {
+    q = q.toLowerCase().trim();
+    if (!q) { clearSearch(); return; }
+
+    searchBanner.classList.add('show');
+    // En mode recherche : on masque le header raccourcis (sinon il reste visible)
+    shortcutsHeader.style.display = 'none';
+
+    let totalVisible = 0;
+
+    pages.forEach(page => {
+      let pageVisible = 0;
+
+      // Cards (raccourcis)
+      page.querySelectorAll('.card').forEach(el => {
+        const match = el.textContent.toLowerCase().includes(q);
+        el.style.display = match ? '' : 'none';
+        if (match) pageVisible++;
+      });
+
+      // Scenarios (MOP)
+      page.querySelectorAll('.scenario').forEach(el => {
+        const match = el.textContent.toLowerCase().includes(q);
+        el.style.display = match ? '' : 'none';
+        if (match) pageVisible++;
+      });
+
+      // Projects (Claude Code)
+      page.querySelectorAll('.project').forEach(el => {
+        const match = el.textContent.toLowerCase().includes(q);
+        el.style.display = match ? '' : 'none';
+        if (match) pageVisible++;
+      });
+
+      // Table rows (cheat sheet, slash commands)
+      page.querySelectorAll('tbody tr').forEach(el => {
+        const match = el.textContent.toLowerCase().includes(q);
+        el.style.display = match ? '' : 'none';
+        if (match) pageVisible++;
+      });
+
+      // Hide empty sections
+      page.querySelectorAll('.section').forEach(section => {
+        const visibleItems = section.querySelectorAll('.card:not([style*="none"]), .scenario:not([style*="none"]), .project:not([style*="none"]), tbody tr:not([style*="none"])');
+        section.style.display = visibleItems.length > 0 ? '' : 'none';
+      });
+
+      // Show page if it has any visible content
+      if (pageVisible > 0) {
+        page.style.display = '';
+        page.classList.add('active');
+        totalVisible += pageVisible;
+      } else {
+        page.style.display = 'none';
+        page.classList.remove('active');
+      }
+    });
+
+    noResults.classList.toggle('show', totalVisible === 0);
+  }
+
+  searchInput.addEventListener('input', (e) => runSearch(e.target.value));
+
+  document.addEventListener('keydown', (e) => {
+    // Escape : clear search
+    if (e.key === 'Escape' && document.activeElement === searchInput) {
+      searchInput.value = '';
+      clearSearch();
+      searchInput.blur();
+    }
+    // / : focus search
+    if (e.key === '/' && document.activeElement !== searchInput && document.activeElement.tagName !== 'INPUT') {
+      e.preventDefault();
+      searchInput.focus();
+    }
+  });
+</script>
+</body>
+</html>
