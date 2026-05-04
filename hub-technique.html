@@ -1288,6 +1288,73 @@
     <!-- RACCOURCIS : TERMINAL                                               -->
     <!-- =================================================================== -->
     <div class="page" data-page="terminal" data-type="shortcuts">
+      <div class="section"><div class="section-title">Naviguer dans les dossiers</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Afficher le dossier courant</span><span class="keys"><kbd class="wide">pwd</kbd></span></div>
+          <div class="card"><span class="card-desc">Lister le contenu</span><span class="keys"><kbd class="wide">ls</kbd></span></div>
+          <div class="card"><span class="card-desc">Lister tout (cachés + détails)</span><span class="keys"><kbd class="wide">ls -la</kbd></span></div>
+          <div class="card"><span class="card-desc">Entrer dans un dossier</span><span class="keys"><kbd class="wide">cd dossier</kbd></span></div>
+          <div class="card"><span class="card-desc">Remonter d'un niveau</span><span class="keys"><kbd class="wide">cd ..</kbd></span></div>
+          <div class="card"><span class="card-desc">Aller au home (~/)</span><span class="keys"><kbd class="wide">cd ~</kbd></span></div>
+          <div class="card"><span class="card-desc">Revenir au dossier précédent</span><span class="keys"><kbd class="wide">cd -</kbd></span></div>
+          <div class="card"><span class="card-desc">Aller à la racine</span><span class="keys"><kbd class="wide">cd /</kbd></span></div>
+          <div class="card"><span class="card-desc">Ouvrir le dossier dans Finder</span><span class="keys"><kbd class="wide">open .</kbd></span></div>
+          <div class="card"><span class="card-desc">Compléter le chemin</span><span class="keys"><kbd>⇥</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Manipuler fichiers et dossiers</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Créer un dossier</span><span class="keys"><kbd class="wide">mkdir nom</kbd></span></div>
+          <div class="card"><span class="card-desc">Créer une arborescence</span><span class="keys"><kbd class="wide">mkdir -p a/b/c</kbd></span></div>
+          <div class="card"><span class="card-desc">Créer un fichier vide</span><span class="keys"><kbd class="wide">touch fichier</kbd></span></div>
+          <div class="card"><span class="card-desc">Copier un fichier</span><span class="keys"><kbd class="wide">cp src dst</kbd></span></div>
+          <div class="card"><span class="card-desc">Copier un dossier</span><span class="keys"><kbd class="wide">cp -R src dst</kbd></span></div>
+          <div class="card"><span class="card-desc">Renommer / déplacer</span><span class="keys"><kbd class="wide">mv ancien nouveau</kbd></span></div>
+          <div class="card"><span class="card-desc">Supprimer un fichier</span><span class="keys"><kbd class="wide">rm fichier</kbd></span></div>
+          <div class="card"><span class="card-desc">Supprimer un dossier</span><span class="keys"><kbd class="wide">rm -rf dossier</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Lire et inspecter</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Afficher tout le fichier</span><span class="keys"><kbd class="wide">cat fichier</kbd></span></div>
+          <div class="card"><span class="card-desc">Lire en paginant</span><span class="keys"><kbd class="wide">less fichier</kbd></span></div>
+          <div class="card"><span class="card-desc">20 premières lignes</span><span class="keys"><kbd class="wide">head -20 f</kbd></span></div>
+          <div class="card"><span class="card-desc">20 dernières lignes</span><span class="keys"><kbd class="wide">tail -20 f</kbd></span></div>
+          <div class="card"><span class="card-desc">Suivre un log en direct</span><span class="keys"><kbd class="wide">tail -f log</kbd></span></div>
+          <div class="card"><span class="card-desc">Compter les lignes</span><span class="keys"><kbd class="wide">wc -l f</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Rechercher</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Chercher un fichier par nom</span><span class="keys"><kbd class="wide">find . -name "*.md"</kbd></span></div>
+          <div class="card"><span class="card-desc">Chercher un texte (récursif)</span><span class="keys"><kbd class="wide">grep -r "mot" .</kbd></span></div>
+          <div class="card"><span class="card-desc">Chercher avec n° de ligne</span><span class="keys"><kbd class="wide">grep -n "mot" f</kbd></span></div>
+          <div class="card"><span class="card-desc">Localiser une commande</span><span class="keys"><kbd class="wide">which git</kbd></span></div>
+          <div class="card"><span class="card-desc">Historique des commandes</span><span class="keys"><kbd class="wide">history</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Système et processus</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Lister les processus</span><span class="keys"><kbd class="wide">ps aux</kbd></span></div>
+          <div class="card"><span class="card-desc">Moniteur live</span><span class="keys"><kbd class="wide">top</kbd></span></div>
+          <div class="card"><span class="card-desc">Tuer un processus</span><span class="keys"><kbd class="wide">kill PID</kbd></span></div>
+          <div class="card"><span class="card-desc">Forcer la fermeture</span><span class="keys"><kbd class="wide">kill -9 PID</kbd></span></div>
+          <div class="card"><span class="card-desc">Espace disque dispo</span><span class="keys"><kbd class="wide">df -h</kbd></span></div>
+          <div class="card"><span class="card-desc">Taille d'un dossier</span><span class="keys"><kbd class="wide">du -sh dossier</kbd></span></div>
+          <div class="card"><span class="card-desc">Mon utilisateur</span><span class="keys"><kbd class="wide">whoami</kbd></span></div>
+          <div class="card"><span class="card-desc">Date et heure</span><span class="keys"><kbd class="wide">date</kbd></span></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Réseau et aide</div>
+        <div class="grid">
+          <div class="card"><span class="card-desc">Pinger un hôte</span><span class="keys"><kbd class="wide">ping host</kbd></span></div>
+          <div class="card"><span class="card-desc">Requête HTTP</span><span class="keys"><kbd class="wide">curl url</kbd></span></div>
+          <div class="card"><span class="card-desc">Headers HTTP seuls</span><span class="keys"><kbd class="wide">curl -I url</kbd></span></div>
+          <div class="card"><span class="card-desc">IP locale (Wi-Fi)</span><span class="keys"><kbd class="wide">ipconfig getifaddr en0</kbd></span></div>
+          <div class="card"><span class="card-desc">Manuel d'une commande</span><span class="keys"><kbd class="wide">man commande</kbd></span></div>
+          <div class="card"><span class="card-desc">Aide rapide</span><span class="keys"><kbd class="wide">cmd --help</kbd></span></div>
+        </div>
+      </div>
       <div class="section"><div class="section-title">Navigation dans la ligne</div>
         <div class="grid">
           <div class="card"><span class="card-desc">Début de la ligne</span><span class="keys"><kbd>⌃</kbd><kbd>A</kbd></span></div>
