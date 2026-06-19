@@ -38,6 +38,7 @@ Publié sur GitHub Pages : https://loxxam.github.io/hub-technique/ (repo : https
 │  MOP          │                                          │
 │   - Git       │                                          │
 │   - Claude    │                                          │
+│   - MD enrichi│                                          │
 │                                                          │
 │  À VENIR      │                                          │
 │   - Docker    │                                          │
@@ -52,7 +53,7 @@ Chaque page = un `<div class="page" data-page="X" data-type="Y">` avec `data-typ
 
 **Type `shortcuts` (10 pages)** : `system`, `chars`, `screenshot`, `finder`, `text`, `simulator`, `jetbrains`, `vscode`, `browser`, `terminal`
 
-**Type `mop` (2 pages)** : `git`, `claude-code`
+**Type `mop` (3 pages)** : `git`, `claude-code`, `md-enrichi`
 
 ### Header adaptatif
 
@@ -107,6 +108,7 @@ Géré par `switchPage()` dans le `<script>` final.
 - 10 catégories de raccourcis complètes
 - Section Git : 7 sous-sections + cheat sheet (concepts, config, quotidien, branches, erreurs, collab)
 - Section Claude Code : 6 sous-sections (installation, premiers pas, scénarios, slash, bonnes pratiques, projets)
+- Section Markdown enrichi : convention de balisage couleur VS Code (légende 6 marqueurs avec aperçu couleur + config `settings.json` copiable, extension fabiospampinato.vscode-highlight)
 - 13 idées de projets calibrées en 4 niveaux (L1 vert, L2 jaune, L3 rouge, L4 violet)
 - Recherche globale dans la sidebar (filtre cards + scenarios + projects + lignes de table)
 - Header adaptatif (légende visible uniquement pour les pages shortcuts)
@@ -215,7 +217,8 @@ git commit -m "Ajoute catégorie Docker (concepts + install)"
 - **v2** — `modes-operatoires.html` : ajout Git + Claude Code, sidebar dédiée
 - **v3** — `hub-technique.html` : fusion des deux, sidebar unifiée, recherche globale, header adaptatif
 - **v4** — `index.html` (actuel) : renommage pour publication GitHub Pages, polices locales, mise en ligne sur https://loxxam.github.io/hub-technique/
+- **v4.1** — ajout du MOP « Markdown enrichi » (convention de balisage couleur VS Code)
 
 ---
 
-*Fichier maintenu à jour à chaque évolution majeure du projet. Dernière mise à jour : 25 avril 2026.*
+*Fichier maintenu à jour à chaque évolution majeure du projet. Dernière mise à jour : 19 juin 2026.*
