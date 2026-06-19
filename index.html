@@ -834,6 +834,11 @@
         <a href="#cc-bonnes-pratiques">Bonnes pratiques</a>
         <a href="#cc-projets">Idées de projets</a>
       </div>
+      <button class="nav-item" data-page="md-enrichi"><span class="nav-icon">🎨</span><span>Markdown enrichi</span></button>
+      <div class="nav-sub">
+        <a href="#md-legende">Légende des marqueurs</a>
+        <a href="#md-config">Configuration VS Code</a>
+      </div>
     </div>
 
     <div class="nav-group">
@@ -2483,6 +2488,93 @@ Propose l'architecture et la stack, on itère.</code></pre>
 
         <div class="callout tip" style="margin-top:32px"><span class="callout-icon">🎯</span><div><strong>Parcours conseillé :</strong> commence par <em>Script VBA documenté</em> (L1), enchaîne avec <em>Générateur de CRUD .NET 8</em> (L2) pour voir la vraie puissance, puis saute sur <em>Extension de CinéFamille</em> (L3). Après ces 3 projets, tu auras le recul pour attaquer un L4 stratégique.</div></div>
 
+      </section>
+
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MOP : MARKDOWN ENRICHI                                              -->
+    <!-- =================================================================== -->
+    <div class="page" data-page="md-enrichi" data-type="mop">
+
+      <div class="page-header">
+        <div class="page-eyebrow">Mode opératoire · Convention perso</div>
+        <h1 class="page-title">Markdown enrichi, <em>balisage couleur</em></h1>
+        <p class="page-intro">Convention personnelle de balisage couleur dans les fichiers <code>.md</code> ouverts sous VS Code. Repose sur l'extension Highlight, qui colore des délimiteurs personnalisés via expressions régulières. Les couleurs sont visibles dans l'éditeur uniquement, pas dans l'aperçu markdown.</p>
+      </div>
+
+      <section class="section" id="md-legende">
+        <h2 class="mop-section-title">Légende des marqueurs</h2>
+        <p class="section-subtitle">Chaque marqueur a un <strong>sens</strong>, pas seulement une couleur. L'aperçu montre le rendu réel dans l'éditeur.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th style="width:160px">Marqueur</th><th style="width:200px">Aperçu</th><th>Usage</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>//texte//</code></td><td><span style="color:#E5A663;font-weight:700">note importante</span></td><td>Note, point de vigilance</td></tr>
+              <tr><td><code>||texte||</code></td><td><span style="color:#F14C4C;font-weight:700">critique</span></td><td>Critique, alerte, bloquant</td></tr>
+              <tr><td><code>==texte==</code></td><td><span style="color:#1F1F1F;background:#E5C07B;padding:1px 4px;border-radius:3px">surligné</span></td><td>Surlignage / mise en avant</td></tr>
+              <tr><td><code>++texte++</code></td><td><span style="color:#4EC9B0;font-weight:700">validé</span></td><td>Validé, OK, décision actée</td></tr>
+              <tr><td><code>??texte??</code></td><td><span style="color:#C586C0;font-style:italic">à vérifier</span></td><td>À vérifier, question ouverte</td></tr>
+              <tr><td><code>~~texte~~</code></td><td><span style="color:#7F848E;text-decoration:line-through">obsolète</span></td><td>Obsolète / abandonné (natif md)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="md-config">
+        <h2 class="mop-section-title">Configuration VS Code</h2>
+        <p class="section-subtitle">Une extension à installer, puis un bloc à coller dans ton <code>settings.json</code>.</p>
+
+        <div class="scenario">
+          <div class="scenario-title">Prérequis : installer l'extension Highlight</div>
+          <div class="scenario-desc">Le barré <code>~~ ~~</code> est natif markdown, mais les cinq autres marqueurs reposent sur l'extension <strong>Highlight</strong> de fabiospampinato, qui applique des décorations via expressions régulières.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">text</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code>Installer l'extension VS Code : fabiospampinato.vscode-highlight</code></pre>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-title">Réglages à ajouter dans <code>settings.json</code></div>
+          <div class="scenario-desc">Colle ces deux blocs dans ton <code>settings.json</code> (⌘⇧P → « Preferences: Open User Settings (JSON) »). Le premier gère le barré natif, le second les marqueurs personnalisés.</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">jsonc</span><button class="copy-btn">📋 Copier</button></div>
+            <pre><code><span class="sh-comment">// editor.tokenColorCustomizations : pour le barré ~~ ~~ (natif markdown)</span>
+<span class="sh-str">"editor.tokenColorCustomizations"</span>: {
+  <span class="sh-str">"textMateRules"</span>: [
+    { <span class="sh-str">"scope"</span>: <span class="sh-str">"markup.strikethrough"</span>, <span class="sh-str">"settings"</span>: { <span class="sh-str">"foreground"</span>: <span class="sh-str">"#7F848E"</span> } }
+  ]
+},
+
+<span class="sh-comment">// highlight.regexes : les marqueurs personnalisés (extension Highlight)</span>
+<span class="sh-str">"highlight.regexes"</span>: {
+  <span class="sh-str">"(//[^/\\n]+//)"</span>: {
+    <span class="sh-str">"filterLanguageRegex"</span>: <span class="sh-str">"markdown"</span>,
+    <span class="sh-str">"decorations"</span>: [{ <span class="sh-str">"color"</span>: <span class="sh-str">"#E5A663"</span>, <span class="sh-str">"fontWeight"</span>: <span class="sh-str">"bold"</span> }]
+  },
+  <span class="sh-str">"(\\|\\|[^|\\n]+\\|\\|)"</span>: {
+    <span class="sh-str">"filterLanguageRegex"</span>: <span class="sh-str">"markdown"</span>,
+    <span class="sh-str">"decorations"</span>: [{ <span class="sh-str">"color"</span>: <span class="sh-str">"#F14C4C"</span>, <span class="sh-str">"fontWeight"</span>: <span class="sh-str">"bold"</span> }]
+  },
+  <span class="sh-str">"(==[^=\\n]+==)"</span>: {
+    <span class="sh-str">"filterLanguageRegex"</span>: <span class="sh-str">"markdown"</span>,
+    <span class="sh-str">"decorations"</span>: [{ <span class="sh-str">"color"</span>: <span class="sh-str">"#1F1F1F"</span>, <span class="sh-str">"backgroundColor"</span>: <span class="sh-str">"#E5C07B"</span> }]
+  },
+  <span class="sh-str">"(\\+\\+[^+\\n]+\\+\\+)"</span>: {
+    <span class="sh-str">"filterLanguageRegex"</span>: <span class="sh-str">"markdown"</span>,
+    <span class="sh-str">"decorations"</span>: [{ <span class="sh-str">"color"</span>: <span class="sh-str">"#4EC9B0"</span>, <span class="sh-str">"fontWeight"</span>: <span class="sh-str">"bold"</span> }]
+  },
+  <span class="sh-str">"(\\?\\?[^?\\n]+\\?\\?)"</span>: {
+    <span class="sh-str">"filterLanguageRegex"</span>: <span class="sh-str">"markdown"</span>,
+    <span class="sh-str">"decorations"</span>: [{ <span class="sh-str">"color"</span>: <span class="sh-str">"#C586C0"</span>, <span class="sh-str">"fontStyle"</span>: <span class="sh-str">"italic"</span> }]
+  }
+}</code></pre>
+          </div>
+          <div class="callout warn"><span class="callout-icon">⚠️</span><div>Le marqueur <code>||</code> sert aussi de séparateur dans les tableaux markdown. Une cellule vide peut donc être colorée par erreur dans un tableau. Sans impact en usage courant de surligneur.</div></div>
+        </div>
       </section>
 
     </div>
