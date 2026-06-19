@@ -4,20 +4,23 @@
 
 ## 1. Le projet en une phrase
 
-Fichier HTML statique unique (`hub-technique.html`) servant de référence technique de bureau pour un DSI travaillant sur Mac : raccourcis clavier macOS AZERTY + modes opératoires (Git, Claude Code, et bientôt Docker / Homebrew / SSH).
+Fichier HTML statique unique (`index.html`) servant de référence technique de bureau pour un DSI travaillant sur Mac : raccourcis clavier macOS AZERTY + modes opératoires (Git, Claude Code, et bientôt Docker / Homebrew / SSH).
+
+Publié sur GitHub Pages : https://loxxam.github.io/hub-technique/ (repo : https://github.com/Loxxam/hub-technique).
 
 ## 2. L'utilisateur
 
-- **Alexandre**, DSI Piscines Desjoyaux SA (Veauche, Loire, France)
+- **Alexandre PASCAL** (prénom Alexandre, nom PASCAL), DSI Piscines Desjoyaux SA (Veauche, Loire, France)
+- Compte Mac : `pascal` — email pro : `pascala@desjoyaux.fr`
 - Stack pro : SAP ECC6, Salesforce, .NET 8 / Rider, Angular 19, Flutter, Docker
-- Machine : MacBook Air M2, clavier AZERTY français
+- Machine : MacBook Air M5, clavier Logitech MX Keys AZERTY français
 - Profil dev : compréhension et supervision plutôt qu'écriture en production
 - **Communication** : toujours en français, ton tutoyant, structuré et direct
 - **Préférences** : prose fluide avec listes ciblées, pas de blabla, validations courtes par numérotation
 
 ## 3. Architecture du fichier
 
-`hub-technique.html` est **un seul fichier HTML autonome** (CSS + JS inline, polices Google Fonts en CDN). Aucune dépendance npm, aucun build step. Tout doit rester dans ce fichier unique.
+`index.html` est **un seul fichier HTML autonome** (CSS + JS inline, polices locales servies depuis `assets/fonts.css`). Aucune dépendance npm, aucun build step. Tout doit rester dans ce fichier unique, à l'exception des polices et de leurs fichiers placés dans `assets/`.
 
 ### Structure visuelle
 
@@ -146,7 +149,7 @@ Pour ajouter une nouvelle catégorie MOP (ex. Docker) :
 
 ## 7. À ne pas faire
 
-- ❌ Découper le fichier en plusieurs fichiers (tout doit rester dans `hub-technique.html`)
+- ❌ Découper le fichier en plusieurs fichiers (tout doit rester dans `index.html`)
 - ❌ Ajouter des dépendances JS externes (pas de framework, pas de bundler)
 - ❌ Toucher à la palette de couleurs ou aux polices
 - ❌ Modifier la structure de la sidebar sans en discuter
@@ -156,7 +159,7 @@ Pour ajouter une nouvelle catégorie MOP (ex. Docker) :
 ## 8. Premier prompt suggéré pour reprendre
 
 ```
-Lis hub-technique.html en entier pour bien comprendre la structure.
+Lis index.html en entier pour bien comprendre la structure.
 Puis lis CLAUDE.md pour connaître les conventions du projet.
 
 On va ajouter la catégorie Docker dans le groupe "Modes opératoires"
@@ -195,8 +198,11 @@ git commit -m "WIP avant ajout Docker"
 claude
 
 # Tester en parallèle dans Safari
-open hub-technique.html
+open index.html
 # (raccourci ⌘R pour rafraîchir après chaque modif)
+
+# Publier les modifs en ligne (GitHub Pages se met à jour automatiquement)
+git push
 
 # À la fin de la session
 git add .
@@ -207,7 +213,8 @@ git commit -m "Ajoute catégorie Docker (concepts + install)"
 
 - **v1** — `raccourcis-mac.html` : 10 catégories de raccourcis, design dark, recherche
 - **v2** — `modes-operatoires.html` : ajout Git + Claude Code, sidebar dédiée
-- **v3** — `hub-technique.html` (actuel) : fusion des deux, sidebar unifiée, recherche globale, header adaptatif
+- **v3** — `hub-technique.html` : fusion des deux, sidebar unifiée, recherche globale, header adaptatif
+- **v4** — `index.html` (actuel) : renommage pour publication GitHub Pages, polices locales, mise en ligne sur https://loxxam.github.io/hub-technique/
 
 ---
 
